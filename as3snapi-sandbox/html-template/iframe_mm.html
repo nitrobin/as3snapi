@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <script type="text/javascript" src="http://cdn.connect.mail.ru/js/loader.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        initFlash();
+    });
+
+    function initFlash() {
+        var flashVars = location.search.replace(/^\?/, '');
+        var flashId = 'flash-app';
+        var data = 'sandbox.swf';
+
+        var attr = {name:flashId, data:data, width:760, height:660};
+        var param = {
+            allowscriptaccess:'always',
+            allownetworking:'all',
+            allowfullscreen:true,
+            wmode:'opaque',
+            flashvars:flashVars
+        }
+        if (swfobject.hasFlashPlayerVersion('11.0.0')) {
+            swfobject.createSWF(attr, param, flashId);
+        } else {
+            attr.data = 'http://swfobject.googlecode.com/svn/trunk/swfobject/expressInstall.swf';
+            swfobject.showExpressInstall(att, {}, flash.id);
+        }
+    }
+</script>
+
+<div id="flash-app"></div>
+
+</body>
+</html>

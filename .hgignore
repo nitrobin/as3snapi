@@ -1,0 +1,5 @@
+syntax: glob
+out
+.idea/*
+as3snapi-sandbox/target/*
+as3snapi-core/target/*

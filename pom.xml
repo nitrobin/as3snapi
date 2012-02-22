@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+	http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>as3snapi</groupId>
+  <artifactId>as3snapi</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>as3snapi - All</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <flex.version>4.5.1.21328</flex.version>
+    <flexmojos.version>4.0-RC2</flexmojos.version>
+    <flashplayer.version>11.1</flashplayer.version>
+    <!--<flexmojos.version>3.9</flexmojos.version>--><!--<flex.version>4.5.0.20967</flex.version>--><!--https://docs.sonatype.org/display/FLEXMOJOS/How+To+Specify+Flash+Player+Target+Version--><!--Comment skipTests for tests executing --><!--<skipTests>true</skipTests>-->
+  </properties>
+
+  <modules>
+    <module>as3snapi-core</module>
+    <module>as3snapi-sandbox</module>
+  </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Configuration for swc and swf builds -->
+        <plugin>
+          <groupId>org.sonatype.flexmojos</groupId>
+          <artifactId>flexmojos-maven-plugin</artifactId>
+          <version>${flexmojos.version}</version>
+          <extensions>true</extensions>
+
+          <configuration>
+            <debug>true</debug>
+            <optimize>true</optimize>
+            <targetPlayer>${flashplayer.version}</targetPlayer>
+            <staticLinkRuntimeSharedLibraries>true</staticLinkRuntimeSharedLibraries>
+            <!--<warnings>--><!--<noConstructor>false</noConstructor>--><!--</warnings>--><!--<locales>--><!--<locale>en_US</locale>--><!--</locales>--><!--<configurationReport>true</configurationReport>-->
+
+            <compilerWarnings>
+              <no-constructor>false</no-constructor>
+            </compilerWarnings>
+            <localesCompiled>
+              <locale>en_US</locale>
+            </localesCompiled>
+            <storepass />
+          </configuration>
+
+          <executions>
+            <execution>
+              <goals>
+                <goal>sources</goal>
+              </goals>
+            </execution>
+          </executions>
+
+          <dependencies>
+            <dependency>
+              <groupId>com.adobe.flex</groupId>
+              <artifactId>compiler</artifactId>
+              <version>${flex.version}</version>
+              <type>pom</type>
+            </dependency>
+            <dependency>
+              <groupId>org.codehaus.plexus</groupId>
+              <artifactId>plexus-archiver</artifactId>
+              <version>1.0</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+
+        <!--
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <configuration>
+                <outputDirectory>${project.build.directory}/lib/</outputDirectory>
+                <overWriteReleases>false</overWriteReleases>
+                <overWriteSnapshots>false</overWriteSnapshots>
+                <overWriteIfNewer>true</overWriteIfNewer>
+                <artifactItems/>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>copy-dependencies</id>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>copy-dependencies</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        -->
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>flex-framework</artifactId>
+      <version>${flex.version}</version>
+      <type>pom</type>
+    </dependency>
+    <!--
+    <dependency>
+        <groupId>com.adobe.flexunit</groupId>
+        <artifactId>flexunit</artifactId>
+        <version>4.1.0</version>
+        <type>swc</type>
+        <scope>test</scope>
+    </dependency>
+
+    <dependency>
+        <groupId>com.adobe</groupId>
+        <artifactId>as3corelib</artifactId>
+        <version>0.93.0</version>
+        <type>swc</type>
+    </dependency>
+    -->
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>flex-mojos-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup//</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>flex-mojos-repository</id>
+      <url>http://repository.sonatype.org/content/groups/flexgroup/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+</project>

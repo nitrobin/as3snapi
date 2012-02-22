@@ -1,0 +1,12 @@
+# /etc/nginx/sites-enabled/as3stuff.nginx
+server {
+	server_name localhost;
+	listen   80;
+
+	location / {
+	    root /srv/www;
+	    autoindex on;
+	    expires -1;
+	}
+}
+
