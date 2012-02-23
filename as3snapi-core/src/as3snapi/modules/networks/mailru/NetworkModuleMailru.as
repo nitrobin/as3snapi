@@ -22,12 +22,8 @@ public class NetworkModuleMailru implements INetworkModule {
             return false;
         }
         var js:IFeatureJavaScript = context.getJavaScript();
-        try {
-            if (js.isAvailable() && js.call("function(){return !!mailru}")) {
-                return true;
-            }
-        } catch (e:Error) {
-            return false;
+        if (js.isAvailable() && js.call("function(){return !!mailru}")) {
+            return true;
         }
         return false;
     }

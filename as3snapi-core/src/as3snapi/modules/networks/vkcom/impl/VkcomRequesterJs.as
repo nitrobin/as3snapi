@@ -18,11 +18,6 @@ public class VkcomRequesterJs implements IFeatureVkcomRequester {
     }
 
     public function apiCall(method:String, params:Object, onSuccess:Function, onFail:Function):void {
-//        javaScript.call("function(method, params){VK.api(method, params, {callback})}"
-//                .replace("{callback}", javaScriptUtils.createOneShotClosure(callback)),
-//                method,
-//                params);
-
         jsUtils.callSmart("VK.api", method, params, callback);
 
         function callback(result:Object):void {

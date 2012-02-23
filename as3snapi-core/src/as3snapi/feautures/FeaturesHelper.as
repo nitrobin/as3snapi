@@ -14,6 +14,7 @@ import as3snapi.feautures.basic.uids.IFeatureFriendUids;
 
 public class FeaturesHelper {
     private static const FEATURES:Array = [
+        IFeatureNetworkId,
         IFeatureAsyncInit,
         IFeatureAppId,
         IFeatureUserId,

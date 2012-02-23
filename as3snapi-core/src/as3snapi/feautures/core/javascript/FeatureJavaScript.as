@@ -16,11 +16,11 @@ public class FeatureJavaScript implements IFeatureJavaScript {
     }
 
     public function isAvailable():Boolean {
-        return  ExternalInterface.available;
+        return ExternalInterface.available;
     }
 
     public function getObjectId():String {
-        return  ExternalInterface.objectID;
+        return ExternalInterface.objectID;
     }
 
     public function call(functionName:String, ...rest):* {

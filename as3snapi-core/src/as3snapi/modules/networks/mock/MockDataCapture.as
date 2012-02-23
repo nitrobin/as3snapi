@@ -1,6 +1,7 @@
 package as3snapi.modules.networks.mock {
 import as3snapi.bus.IBus;
 import as3snapi.feautures.basic.IFeatureAppId;
+import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.profiles.IFeatureAppFriendsProfiles;
@@ -30,6 +31,9 @@ public class MockDataCapture {
             uids = [];
         }
 
+        if (bus.hasFeature(IFeatureNetworkId)) {
+            data.shortNetworkId = IFeatureNetworkId(bus.getFeature(IFeatureNetworkId)).getShortNetworkId();
+        }
         if (bus.hasFeature(IFeatureAppId)) {
             data.appId = IFeatureAppId(bus.getFeature(IFeatureAppId)).getAppId();
         }

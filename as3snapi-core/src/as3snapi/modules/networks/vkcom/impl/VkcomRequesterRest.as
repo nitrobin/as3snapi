@@ -14,6 +14,7 @@ public class VkcomRequesterRest implements IFeatureVkcomRequester {
     }
 
     public function apiCall(method:String, params:Object, onSuccess:Function, onFail:Function):void {
+        throw new Error("Not implemented!")
         requester.doRequestJson(state.api_url, params, URLRequestMethod.POST, onSuccess, onFail);
     }
 }

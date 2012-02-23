@@ -7,6 +7,7 @@ import as3snapi.core.INetworkModule;
 import as3snapi.core.ISocialityConnectHandler;
 import as3snapi.core.ISocialityConnection;
 import as3snapi.feautures.basic.IFeatureAppId;
+import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.invites.IFeatureInvitePopup;
@@ -51,6 +52,7 @@ public class AppController implements ISocialityConnectHandler {
     public function connect():void {
         log("configuring..");
         var mockData:Object = {
+            shortNetworkId:"mock",
             userId:1,
             inviterId:2,
             asppId:123,
@@ -134,6 +136,13 @@ public class AppController implements ISocialityConnectHandler {
     }
 
     private function testBus(connection:ISocialityConnection):void {
+
+        var fNetworkInfo:IFeatureNetworkId = connection.getFeature(IFeatureNetworkId)
+        if (fNetworkInfo != null) {
+            log("IFeatureNetworkId: " + fNetworkInfo.getShortNetworkId());
+        } else {
+            log("IFeatureNetworkId - UNSUPPORTED");
+        }
 
         var fAppId:IFeatureAppId = connection.getFeature(IFeatureAppId)
         if (fAppId != null) {

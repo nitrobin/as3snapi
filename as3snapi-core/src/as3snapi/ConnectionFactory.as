@@ -137,6 +137,7 @@ public class ConnectionFactory implements IConnectionFactory {
         var log:IFeatureLog = bus.getFeature(IFeatureLog);
         if (bus.hasFeature(IFeatureAsyncInit)) {
             log.log("Init: AsyncInit.init()...");
+            //TODO: таймаут
             var initHandler:IAsyncInitHandler = new AsyncInitHandler(function (result:Object):void {
                 log.log("Init: ready.");
                 handler.onSuccess(connection);

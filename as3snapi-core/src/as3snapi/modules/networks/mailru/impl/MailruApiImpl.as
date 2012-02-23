@@ -1,5 +1,6 @@
 package as3snapi.modules.networks.mailru.impl {
 import as3snapi.feautures.basic.IFeatureAppId;
+import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.init.IAsyncInitHandler;
@@ -25,6 +26,7 @@ import flash.utils.setTimeout;
  * Реализация mail.ru API
  */
 public class MailruApiImpl implements IFeatureMailruApiCore,
+        IFeatureNetworkId,
         IFeatureAppId,
         IFeatureUserId,
         IFeatureRefererId,
@@ -44,7 +46,7 @@ public class MailruApiImpl implements IFeatureMailruApiCore,
     public function MailruApiImpl(state:MailruState) {
         this.state = state;
         this.js = state.context.getJavaScript();
-        //TODO: Баг флэш плеера? js.getObjectId() может возвращать null если флэшка загружена на сервер mail.ru
+        //TODO: Баг флэш плеера или Chromium? js.getObjectId() может возвращать null если флэшка загружена на сервер mail.ru
         var objectId:String = js.getObjectId() || "flash-app";
         this.jsUtils = new JavaScriptUtils(js, objectId);
         this.events = state.context.getEventDispatcher();
@@ -58,13 +60,17 @@ public class MailruApiImpl implements IFeatureMailruApiCore,
         jsUtils.callSmart("mailru.loader.require", "api", function ():void {
             js.call("mailru.app.init", privateKey);// вероятно лишнее
             jsUtils.callSmart("mailru.events.listen", 'event', jsUtils.permanent(onEvent));
-            handler.onSuccess(null);
+            handler.onSuccess("ok");
         });
     }
 
     private function onEvent(name:String, data:Object, ...rest):void {
         state.context.eventLog({name:name, data:data});
         events.dispatchEvent(new EventMailru(name, data));
+    }
+
+    public function getShortNetworkId():String {
+        return "mm";
     }
 
     public function getAppId():String {

@@ -1,6 +1,7 @@
 package as3snapi.modules.networks.mock.impl {
 import as3snapi.core.INetworkModuleContext;
 import as3snapi.feautures.basic.IFeatureAppId;
+import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.init.IAsyncInitHandler;
@@ -19,6 +20,7 @@ import as3snapi.modules.networks.mock.features.IFeatureMockApi;
 import flash.net.URLRequestMethod;
 
 public class MockApiImpl implements IFeatureMockApi,
+        IFeatureNetworkId,
         IFeatureAppId,
         IFeatureUserId,
         IFeatureRefererId,
@@ -37,6 +39,9 @@ public class MockApiImpl implements IFeatureMockApi,
         this.httpRequester = context.getHttpRequester();
     }
 
+    public function getShortNetworkId():String {
+        return data.shortNetworkId;
+    }
 
     public function getAppId():String {
         return data.appId;
@@ -90,16 +95,15 @@ public class MockApiImpl implements IFeatureMockApi,
             if (dataUrl == null) {
                 handler.onFail("Empty data")
             } else {
-                //TODO
                 httpRequester.doRequestJson(dataUrl, null, URLRequestMethod.GET, function (r:Object):void {
                     data = r;
-                    handler.onSuccess(r);
+                    handler.onSuccess("ok");
                 }, function (r:Object):void {
                     handler.onFail(r);
                 });
             }
         } else {
-            handler.onSuccess(null);
+            handler.onSuccess("ok");
         }
     }
 

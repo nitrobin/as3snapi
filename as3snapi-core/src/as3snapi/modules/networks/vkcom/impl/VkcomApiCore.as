@@ -1,6 +1,7 @@
 package as3snapi.modules.networks.vkcom.impl {
 import as3snapi.bus.IMutableBus;
 import as3snapi.feautures.basic.IFeatureAppId;
+import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.profiles.IFeatureProfilesBase;
@@ -14,6 +15,7 @@ import as3snapi.modules.networks.vkcom.features.IFeatureVkcomApiCore;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomRequester;
 
 public class VkcomApiCore implements IFeatureVkcomApiCore,
+        IFeatureNetworkId,
         IFeatureAppId,
         IFeatureUserId,
         IFeatureRefererId,
@@ -28,7 +30,10 @@ public class VkcomApiCore implements IFeatureVkcomApiCore,
         this.state = state;
         var bus:IMutableBus = state.context.getBus();
         this.requester = bus.getFeature(IFeatureVkcomRequester);
+    }
 
+    public function getShortNetworkId():String {
+        return "vk";
     }
 
     public function getAppId():String {
