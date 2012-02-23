@@ -11,6 +11,8 @@ public class VkcomState {
     internal var api_url:String;
     internal var viewer_id:String;
     internal var user_id:String;
+    internal var sid:String;
+    internal var secret:String;
 
     public function VkcomState(context:INetworkModuleContext) {
         this.context = context;
@@ -22,6 +24,8 @@ public class VkcomState {
         this.api_url = flashVars.getString("api_url");
         this.viewer_id = flashVars.getString("viewer_id");
         this.user_id = flashVars.getString("user_id");
+        this.sid = flashVars.getString("sid");
+        this.secret = flashVars.getString("secret");
         if (this.user_id == "0") {
             this.user_id = null;
         }

@@ -12,9 +12,13 @@ import as3snapi.modules.networks.vkcom.features.IFeatureVkcomMethods;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomRequester;
 import as3snapi.modules.networks.vkcom.impl.VkcomApiCore;
 import as3snapi.modules.networks.vkcom.impl.VkcomApiUi;
+import as3snapi.modules.networks.vkcom.impl.VkcomEventsJs;
 import as3snapi.modules.networks.vkcom.impl.VkcomMethodsJs;
 import as3snapi.modules.networks.vkcom.impl.VkcomRequesterJs;
+import as3snapi.modules.networks.vkcom.impl.VkcomRequesterRest;
 import as3snapi.modules.networks.vkcom.impl.VkcomState;
+
+import flash.utils.getTimer;
 
 /**
  * Модуль поддержки API vk.com
@@ -24,12 +28,15 @@ public class NetworkModuleVkcom implements INetworkModule {
     }
 
     public function isAvailable(context:INetworkModuleContext):Boolean {
-        var flashVars:FlashVars = context.getFlashVars();
-        var apiUrl:String = flashVars.getString('api_url');
-        if (apiUrl == null || !apiUrl.match(/(vkontakte\.ru)|(vk\.com)/)) {
-            return false;
+        if (context.getConfig() is ConfigVkcom) {
+            var flashVars:FlashVars = context.getFlashVars();
+            var apiUrl:String = flashVars.getString('api_url');
+            if (apiUrl == null || !apiUrl.match(/(vkontakte\.ru)|(vk\.com)/)) {
+                return false;
+            }
+            return true;
         }
-        return context.getConfig() is ConfigVkcom;
+        return false;
     }
 
     public function install(context:INetworkModuleContext):void {
@@ -37,15 +44,17 @@ public class NetworkModuleVkcom implements INetworkModule {
         var state:VkcomState = new VkcomState(context);
 
         var js:IFeatureJavaScript = context.getJavaScript();
-        if (js.isAvailable()) {
+//        if (js.isAvailable()) {
+        if (jsCallbacksAvailable(js)) {
             context.log("Using JavaScript driver");
             bus.addFeature(IFeatureVkcomRequester, new VkcomRequesterJs(state));
             bus.addFeature(IFeatureVkcomMethods, new VkcomMethodsJs(state));
+            new VkcomEventsJs(state);
             bus.addFeature(IFeatureAsyncInit, new VkcomJsAsyncInit(context));
         } else {
-            throw new Error();
-//            context.log("Using HTTP-REST driver");
-//            bus.addFeature(IFeatureVkRequester, new VkRequesterRest(state));
+            context.log("Using HTTP-REST driver");
+            bus.addFeature(IFeatureVkcomRequester, new VkcomRequesterRest(state, context));
+            // TODO: IFeatureVkcomMethods в режиме "без контейнера"
         }
 
         if (bus.hasFeature(IFeatureVkcomMethods)) {
@@ -57,6 +66,21 @@ public class NetworkModuleVkcom implements INetworkModule {
         var apiCore:VkcomApiCore = new VkcomApiCore(state);
         bus.addFeature(IFeatureVkcomApiCore, apiCore);
         FeaturesHelper.installBasicFeatures(bus, apiCore);
+    }
+
+    private function jsCallbacksAvailable(js:IFeatureJavaScript):Boolean {
+        if (js.isAvailable()) {
+            try {
+                var fn:String = "testVkCallback" + getTimer();
+                js.addCallback(fn, function (...rest):void {
+                });
+                js.addCallback(fn, null);
+                return true;
+            } catch (e:Error) {
+                return false;
+            }
+        }
+        return false;
     }
 }
 }
@@ -70,16 +94,17 @@ import as3snapi.feautures.core.javascript.JavaScriptUtils;
 /**
  * Инициалозация JS API
  */
-internal class VkcomJsAsyncInit implements IFeatureAsyncInit{
+internal class VkcomJsAsyncInit implements IFeatureAsyncInit {
     private var js:IFeatureJavaScript;
     private var jsUtils:JavaScriptUtils;
+
     public function VkcomJsAsyncInit(context:INetworkModuleContext) {
         this.js = context.getJavaScript();
         this.jsUtils = new JavaScriptUtils(js);
     }
 
     public function init(handler:IAsyncInitHandler):void {
-        jsUtils.callSmart("VK.init", function(...rest):void{
+        jsUtils.callSmart("VK.init", function (...rest):void {
             handler.onSuccess("ok");
         });
     }
