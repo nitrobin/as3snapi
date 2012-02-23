@@ -3,9 +3,9 @@ import as3snapi.ConnectionFactory;
 import as3snapi.IConnectionFactory;
 import as3snapi.core.IBusModule;
 import as3snapi.core.INetworkConfig;
+import as3snapi.core.INetworkConnectHandler;
+import as3snapi.core.INetworkConnection;
 import as3snapi.core.INetworkModule;
-import as3snapi.core.ISocialityConnectHandler;
-import as3snapi.core.ISocialityConnection;
 import as3snapi.feautures.basic.IFeatureAppId;
 import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
@@ -41,9 +41,9 @@ import mx.events.CloseEvent;
 
 import spark.components.Button;
 
-public class AppController implements ISocialityConnectHandler {
+public class AppController implements INetworkConnectHandler {
     private var app:SandboxMain;
-    private var connection:ISocialityConnection;
+    private var connection:INetworkConnection;
 
     public function AppController(app:SandboxMain) {
         this.app = app;
@@ -113,7 +113,7 @@ public class AppController implements ISocialityConnectHandler {
         log(result);
     }
 
-    public function onSuccess(connection:ISocialityConnection):void {
+    public function onSuccess(connection:INetworkConnection):void {
         this.connection = connection;
         logLine();
         log("READY");
@@ -135,7 +135,7 @@ public class AppController implements ISocialityConnectHandler {
         }
     }
 
-    private function testBus(connection:ISocialityConnection):void {
+    private function testBus(connection:INetworkConnection):void {
 
         var fNetworkInfo:IFeatureNetworkId = connection.getFeature(IFeatureNetworkId)
         if (fNetworkInfo != null) {

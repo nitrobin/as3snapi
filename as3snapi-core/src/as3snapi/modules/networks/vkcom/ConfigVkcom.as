@@ -1,6 +1,6 @@
 package as3snapi.modules.networks.vkcom {
 import as3snapi.core.INetworkConfig;
-import as3snapi.core.NetworkConfigBase;
+import as3snapi.modules.networks.NetworkConfigBase;
 
 /**
  * Настройки для vk.com

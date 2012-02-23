@@ -1,6 +1,9 @@
 package as3snapi.bus {
 import flash.events.IEventDispatcher;
 
+/**
+ * Неизменяемая шина для навешивания функций
+ */
 public interface IBus extends IEventDispatcher {
     function getFeature(featureClass:Class):*;
 

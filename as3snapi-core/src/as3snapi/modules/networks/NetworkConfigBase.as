@@ -1,4 +1,6 @@
-package as3snapi.core {
+package as3snapi.modules.networks {
+import as3snapi.core.INetworkConfig;
+
 public class NetworkConfigBase implements INetworkConfig {
     private var values:Object = {};
 

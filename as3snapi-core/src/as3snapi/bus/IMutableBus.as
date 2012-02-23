@@ -1,4 +1,7 @@
 package as3snapi.bus {
+/**
+ * Изменяемая шина для навешивания функций
+ */
 public interface IMutableBus extends IBus {
 
     function addFeature(featureClass:Class, instance:Object):IMutableBus;

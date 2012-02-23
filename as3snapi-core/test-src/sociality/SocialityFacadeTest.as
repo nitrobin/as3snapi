@@ -2,8 +2,8 @@ package as3snapi {
 import as3snapi.ISocialityConnection;
 import as3snapi.core.INetworkModule;
 import as3snapi.core.INetworkModuleContext;
-import as3snapi.core.ISocialityConnectHandler;
-import as3snapi.core.ISocialityConnection;
+import as3snapi.core.INetworkConnectHandler;
+import as3snapi.core.INetworkConnection;
 import as3snapi.feautures.core.flashvars.FlashVars;
 
 import flash.events.Event;
@@ -14,7 +14,7 @@ public class SocialityFacadeTest {
 //    [Before(async, timeout=5000)]
     public function prepareMockolates():void {
         Async.proceedOnEvent(this,
-                prepare(INetworkConfig, INetworkModule, ISocialityConnectHandler),
+                prepare(INetworkConfig, INetworkModule, INetworkConnectHandler),
                 Event.COMPLETE);
     }
 
@@ -28,7 +28,7 @@ public class SocialityFacadeTest {
         var facade:IConnectionFactory = new ConnectionFactory();
         var config:INetworkConfig = nice(INetworkConfig);
         var module:INetworkModule = nice(INetworkModule);
-        var handler:ISocialityConnectHandler = nice(ISocialityConnectHandler);
+        var handler:INetworkConnectHandler = nice(INetworkConnectHandler);
 
         mock(module).method("check").returns(true);
 
@@ -51,7 +51,7 @@ public class SocialityFacadeTest {
         assertThat(module, received().method('check').args(instanceOf(INetworkModuleContext)).once());
         assertThat(module, received().method('configure').args(instanceOf(INetworkModuleContext)).once());
 
-        assertThat(handler, received().method('onSuccess').args(facade, instanceOf(ISocialityConnection)).once());
+        assertThat(handler, received().method('onSuccess').args(facade, instanceOf(INetworkConnection)).once());
         assertThat(handler, received().method('onFail').never());
     }
 
@@ -60,7 +60,7 @@ public class SocialityFacadeTest {
         var facade:IConnectionFactory = new ConnectionFactory();
         var config:INetworkConfig = nice(INetworkConfig);
         var module:INetworkModule = nice(INetworkModule);
-        var handler:ISocialityConnectHandler = nice(ISocialityConnectHandler);
+        var handler:INetworkConnectHandler = nice(INetworkConnectHandler);
 
         mock(module).method("check").returns(false);
 

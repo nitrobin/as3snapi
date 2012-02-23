@@ -1,9 +1,9 @@
 package as3snapi.modules.networks.mock {
 import as3snapi.core.INetworkConfig;
-import as3snapi.core.NetworkConfigBase;
+import as3snapi.modules.networks.NetworkConfigBase;
 
 /**
- * Настройки для mock
+ * Настройки для оффлайновой mock-сети на основе заранее подготовленных данных
  */
 public class ConfigMock extends NetworkConfigBase implements INetworkConfig {
     private var data:Object;

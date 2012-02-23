@@ -1,13 +1,12 @@
 package as3snapi {
 import as3snapi.bus.BusImpl;
 import as3snapi.bus.IMutableBus;
+import as3snapi.core.BusEvent;
 import as3snapi.core.IBusModule;
 import as3snapi.core.INetworkConfig;
+import as3snapi.core.INetworkConnectHandler;
 import as3snapi.core.INetworkModule;
 import as3snapi.core.INetworkModuleContext;
-import as3snapi.core.ISocialityConnectHandler;
-import as3snapi.core.NetworkModuleContext;
-import as3snapi.core.SocialityConnection;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.init.AsyncInitHandler;
 import as3snapi.feautures.basic.init.IAsyncInitHandler;
@@ -19,7 +18,6 @@ import as3snapi.feautures.basic.profiles.IFeatureProfilesBase;
 import as3snapi.feautures.basic.profiles.IFeatureSelfProfile;
 import as3snapi.feautures.basic.uids.IFeatureAppFriendUids;
 import as3snapi.feautures.basic.uids.IFeatureFriendUids;
-import as3snapi.feautures.core.event.BusReadyEvent;
 import as3snapi.feautures.core.event.IFeatureEventDispatcher;
 import as3snapi.feautures.core.flashvars.FlashVars;
 import as3snapi.feautures.core.flashvars.IFeatureFlashVarsGetter;
@@ -39,6 +37,13 @@ public class ConnectionFactory implements IConnectionFactory {
     private var busModules:Vector.<IBusModule> = new <IBusModule>[];
 
 
+    /**
+     *
+     * @param flashVars объект с параметрами полученными приложением от соцсети
+     * @param networkConfigs список настроек для доступных соцсетей
+     * @param networkModules спсиок модулей для используемых соцсетей
+     * @param busModules список модулей для навешивания дополнительных возможностей на шину
+     */
     public function ConnectionFactory(flashVars:* = null, networkConfigs:Vector.<INetworkConfig> = null, networkModules:Vector.<INetworkModule> = null, busModules:Vector.<IBusModule> = null) {
         if (flashVars != null) {
             setFlashVars(flashVars);
@@ -81,7 +86,7 @@ public class ConnectionFactory implements IConnectionFactory {
     }
 
 
-    public function createConnection(handler:ISocialityConnectHandler):void {
+    public function createConnection(handler:INetworkConnectHandler):void {
         var bus:IMutableBus = new BusImpl();
 
         // Pre configure  bus
@@ -99,7 +104,7 @@ public class ConnectionFactory implements IConnectionFactory {
 
         logFlashVars(bus);
 
-        bus.dispatchEvent(new BusReadyEvent(BusReadyEvent.BASIC_FEATURES_ADDED));
+        bus.dispatchEvent(new BusEvent(BusEvent.BASIC_FEATURES_ADDED));
 
         // Detect
         for each(var config:INetworkConfig in networkConfigs) {
@@ -114,7 +119,7 @@ public class ConnectionFactory implements IConnectionFactory {
         handler.onFail("");
     }
 
-    private function doConnect(networkModule:INetworkModule, context:INetworkModuleContext, handler:ISocialityConnectHandler):void {
+    private function doConnect(networkModule:INetworkModule, context:INetworkModuleContext, handler:INetworkConnectHandler):void {
         var bus:IMutableBus = context.getBus();
 
         // Configure network
@@ -124,14 +129,14 @@ public class ConnectionFactory implements IConnectionFactory {
         // Добавляем IFeatureProfiles на основе IFeatureProfilesBase
         implementProfilesIfNotExist(bus);
 
-        bus.dispatchEvent(new BusReadyEvent(BusReadyEvent.SOCIAL_NETWORK_FEATURES_ADDED));
+        bus.dispatchEvent(new BusEvent(BusEvent.SOCIAL_NETWORK_FEATURES_ADDED));
 
         // Добавляем IFeature*Profiles на основе IFeatureProfiles
         implementHelperProfilesIfNotExist(bus);
-        bus.dispatchEvent(new BusReadyEvent(BusReadyEvent.FEATURES_READY));
+        bus.dispatchEvent(new BusEvent(BusEvent.FEATURES_READY));
 
         logFeatures(bus);
-        var connection:SocialityConnection = new SocialityConnection(bus, context.getConfig());
+        var connection:NetworkConnection = new NetworkConnection(bus, context.getConfig());
 
         //TODO Возможно стоит избавиться от кастинга
         var log:IFeatureLog = bus.getFeature(IFeatureLog);
@@ -209,7 +214,11 @@ public class ConnectionFactory implements IConnectionFactory {
 }
 }
 
+import as3snapi.bus.IBus;
 import as3snapi.bus.IMutableBus;
+import as3snapi.core.INetworkConfig;
+import as3snapi.core.INetworkConnection;
+import as3snapi.core.INetworkModuleContext;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.profiles.*;
 import as3snapi.feautures.basic.uids.IFeatureAppFriendUids;
@@ -218,8 +227,13 @@ import as3snapi.feautures.basic.uids.IdsHandler;
 import as3snapi.feautures.core.event.IFeatureEventDispatcher;
 import as3snapi.feautures.core.flashvars.FlashVars;
 import as3snapi.feautures.core.flashvars.IFeatureFlashVarsGetter;
+import as3snapi.feautures.core.javascript.IFeatureJavaScript;
+import as3snapi.feautures.core.log.FeatureLogTrace;
+import as3snapi.feautures.core.log.IFeatureLog;
+import as3snapi.feautures.core.requester.IFeatureHttpRequester;
 
 import flash.events.EventDispatcher;
+import flash.events.IEventDispatcher;
 
 internal class FeatureFlashVarsGetter implements IFeatureFlashVarsGetter {
     private var flashVars:FlashVars;
@@ -322,5 +336,92 @@ internal class FeatureSelfProfileHelper implements IFeatureSelfProfile {
                 }, function (result:Object):void {
                     handler.onFail(result);
                 }));
+    }
+}
+
+internal class NetworkConnection implements INetworkConnection {
+    private var bus:IBus;
+    private var config:INetworkConfig;
+
+    public function NetworkConnection(bus:IBus, config:INetworkConfig) {
+        this.bus = bus;
+        this.config = config;
+    }
+
+    public function getBus():IBus {
+        return bus;
+    }
+
+    public function getConfig():INetworkConfig {
+        return config;
+    }
+
+    public function getFeature(featureClass:Class):* {
+        return bus.getFeature(featureClass);
+    }
+
+    public function hasFeature(featureClass:Class):Boolean {
+        return bus.hasFeature(featureClass);
+    }
+}
+
+internal class NetworkModuleContext implements INetworkModuleContext {
+    private var bus:IMutableBus;
+    private var config:INetworkConfig;
+    private var fFlashVarsGetter:IFeatureFlashVarsGetter;
+    private var fLog:IFeatureLog;
+    private var fHttpRequester:IFeatureHttpRequester;
+    private var fJavaScript:IFeatureJavaScript;
+    private var fEventDispatcher:IFeatureEventDispatcher;
+
+
+    public function NetworkModuleContext(bus:IMutableBus, config:INetworkConfig) {
+        this.bus = bus;
+        this.config = config;
+        this.fFlashVarsGetter = bus.getFeature(IFeatureFlashVarsGetter);
+        this.fLog = bus.getFeature(IFeatureLog);
+        this.fHttpRequester = bus.getFeature(IFeatureHttpRequester);
+        this.fJavaScript = bus.getFeature(IFeatureJavaScript);
+        this.fEventDispatcher = bus.getFeature(IFeatureEventDispatcher);
+    }
+
+    public function getBus():IMutableBus {
+        return bus;
+    }
+
+    public function getConfig():INetworkConfig {
+        return config;
+    }
+
+    public function getFlashVars():FlashVars {
+        return fFlashVarsGetter ? fFlashVarsGetter.getFlashVars() : new FlashVars(null);
+    }
+
+    public function getLog():IFeatureLog {
+        return fLog;
+    }
+
+    public function getHttpRequester():IFeatureHttpRequester {
+        return fHttpRequester;
+    }
+
+    public function getJavaScript():IFeatureJavaScript {
+        return fJavaScript;
+    }
+
+    public function getEventDispatcher():IEventDispatcher {
+        return fEventDispatcher;
+    }
+
+    public function log(msg:*):void {
+        fLog.log(msg);
+    }
+
+    public function apiLog(msg:*):void {
+        fLog.apiLog("API: " + FeatureLogTrace.universalDump(msg));
+    }
+
+    public function eventLog(msg:*):void {
+        fLog.eventLog("EVENT: " + FeatureLogTrace.universalDump(msg));
     }
 }

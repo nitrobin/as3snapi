@@ -1,4 +1,7 @@
 package as3snapi.core {
+/**
+ * Интерфейс модуль подключения API конкретной соцсети
+ */
 public interface INetworkModule {
     /**
      * Поддержка API доступна

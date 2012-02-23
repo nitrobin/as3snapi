@@ -7,6 +7,9 @@ import as3snapi.feautures.core.requester.IFeatureHttpRequester;
 
 import flash.events.IEventDispatcher;
 
+/**
+ * Контекст для модуля соцсети.
+ */
 public interface INetworkModuleContext {
 
     function getBus():IMutableBus;

@@ -1,7 +1,10 @@
 package as3snapi.core {
 import as3snapi.bus.IBus;
 
-public interface ISocialityConnection {
+/**
+ * Интерфейс активного подключения к соцсети
+ */
+public interface INetworkConnection {
     function getBus():IBus;
 
     function getFeature(featureClass:Class):*;
