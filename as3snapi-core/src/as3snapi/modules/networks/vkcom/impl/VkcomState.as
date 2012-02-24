@@ -13,6 +13,7 @@ public class VkcomState {
     internal var user_id:String;
     internal var sid:String;
     internal var secret:String;
+    internal var lc_name:String;
 
     public function VkcomState(context:INetworkModuleContext) {
         this.context = context;
@@ -26,6 +27,7 @@ public class VkcomState {
         this.user_id = flashVars.getString("user_id");
         this.sid = flashVars.getString("sid");
         this.secret = flashVars.getString("secret");
+        this.lc_name = flashVars.getString("lc_name");
         if (this.user_id == "0") {
             this.user_id = null;
         }

@@ -5,6 +5,9 @@ import as3snapi.feautures.basic.invites.IFeatureInvitePopup;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomApiUi;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomMethods;
 
+/**
+ * Функции связанные с интерфейсом. Отображение диалогов.
+ */
 public class VkcomApiUi implements IFeatureVkcomApiUi,
         IFeatureInvitePopup {
     private var methods:IFeatureVkcomMethods;

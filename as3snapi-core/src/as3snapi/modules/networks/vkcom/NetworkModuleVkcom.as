@@ -12,15 +12,16 @@ import as3snapi.modules.networks.vkcom.features.IFeatureVkcomMethods;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomRequester;
 import as3snapi.modules.networks.vkcom.impl.VkcomApiCore;
 import as3snapi.modules.networks.vkcom.impl.VkcomApiUi;
+import as3snapi.modules.networks.vkcom.impl.VkcomDriverLC;
 import as3snapi.modules.networks.vkcom.impl.VkcomMethodsJs;
 import as3snapi.modules.networks.vkcom.impl.VkcomRequesterJs;
-import as3snapi.modules.networks.vkcom.impl.VkcomRequesterRest;
 import as3snapi.modules.networks.vkcom.impl.VkcomState;
 
 import flash.utils.getTimer;
 
 /**
  * Модуль поддержки API vk.com
+ * {@link:http://vk.com/developers.php}
  */
 public class NetworkModuleVkcom implements INetworkModule {
     public function NetworkModuleVkcom() {
@@ -30,10 +31,9 @@ public class NetworkModuleVkcom implements INetworkModule {
         if (context.getConfig() is ConfigVkcom) {
             var flashVars:FlashVars = context.getFlashVars();
             var apiUrl:String = flashVars.getString('api_url');
-            if (apiUrl == null || !apiUrl.match(/(vkontakte\.ru)|(vk\.com)/)) {
-                return false;
+            if (apiUrl != null && apiUrl.match(/(vkontakte\.ru)|(vk\.com)/)) {
+                return true;
             }
-            return true;
         }
         return false;
     }
@@ -50,9 +50,11 @@ public class NetworkModuleVkcom implements INetworkModule {
             bus.addFeature(IFeatureVkcomMethods, new VkcomMethodsJs(state, context));
             bus.addFeature(IFeatureAsyncInit, new VkcomJsAsyncInit(context));
         } else {
-            context.log("Using HTTP-REST driver");
-            bus.addFeature(IFeatureVkcomRequester, new VkcomRequesterRest(state, context));
-            // TODO: IFeatureVkcomMethods в режиме "без контейнера"
+            context.log("Using LocalConnection driver");
+            var vkcomDriverLC:VkcomDriverLC = new VkcomDriverLC(state, context);
+            bus.addFeature(IFeatureVkcomRequester, vkcomDriverLC);
+            bus.addFeature(IFeatureVkcomMethods, vkcomDriverLC);
+            bus.addFeature(IFeatureAsyncInit, new VkcomLCAsyncInit(context, vkcomDriverLC));
         }
 
         if (bus.hasFeature(IFeatureVkcomMethods)) {
@@ -87,6 +89,7 @@ import as3snapi.core.INetworkModuleContext;
 import as3snapi.feautures.basic.init.IAsyncInitHandler;
 import as3snapi.feautures.basic.init.IFeatureAsyncInit;
 import as3snapi.feautures.core.javascript.JavaScriptUtils;
+import as3snapi.modules.networks.vkcom.impl.VkcomDriverLC;
 
 /**
  * Инициалозация JS API
@@ -102,5 +105,22 @@ internal class VkcomJsAsyncInit implements IFeatureAsyncInit {
         jsUtils.callSmart("VK.init", function (...rest):void {
             handler.onSuccess("ok");
         });
+    }
+}
+
+/**
+ * Инициалозация
+ */
+internal class VkcomLCAsyncInit implements IFeatureAsyncInit {
+    private var vkcomMethodsLC:VkcomDriverLC;
+
+    public function VkcomLCAsyncInit(context:INetworkModuleContext, vkcomMethodsLC:VkcomDriverLC) {
+        this.vkcomMethodsLC = vkcomMethodsLC;
+    }
+
+    public function init(handler:IAsyncInitHandler):void {
+        vkcomMethodsLC.init(function ():void {
+            handler.onSuccess("ok")
+        })
     }
 }

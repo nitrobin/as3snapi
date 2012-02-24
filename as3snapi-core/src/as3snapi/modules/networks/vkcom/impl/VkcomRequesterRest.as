@@ -8,6 +8,9 @@ import as3snapi.utils.ObjectUtils;
 import flash.net.URLRequestMethod;
 import flash.utils.setTimeout;
 
+/**
+ * HTTP-REST драйвер дря работы с VK API.
+ */
 public class VkcomRequesterRest implements IFeatureVkcomRequester {
     private var state:VkcomState;
     private var context:INetworkModuleContext;
@@ -32,6 +35,7 @@ public class VkcomRequesterRest implements IFeatureVkcomRequester {
         requester.doRequestJson(state.api_url, requestParams, URLRequestMethod.POST, onSuccess2, onFail);
 
         function onSuccess2(result:Object):void {
+            // TODO: вынести setTimeout
             if (("error" in result) && (result.error.error_code == 6)) {
                 setTimeout(apiCall, 500, method, params, onSuccess, onFail);
                 return;

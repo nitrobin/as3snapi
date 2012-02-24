@@ -6,6 +6,9 @@ import as3snapi.modules.networks.vkcom.features.*;
 
 import flash.events.IEventDispatcher;
 
+/**
+ * JS драйвер дря работы с VK API.
+ */
 public class VkcomMethodsJs implements IFeatureVkcomMethods {
     private var context:INetworkModuleContext;
     private var js:IFeatureJavaScript;
