@@ -13,8 +13,8 @@ import as3snapi.modules.networks.mailru.impl.MailruState;
  * Модуль поддержки API mail.ru
  * {@link:http://api.mail.ru/docs/}
  */
-public class NetworkModuleMailru implements INetworkModule {
-    public function NetworkModuleMailru() {
+public class ModuleMailru implements INetworkModule {
+    public function ModuleMailru() {
     }
 
     public function isAvailable(context:INetworkModuleContext):Boolean {

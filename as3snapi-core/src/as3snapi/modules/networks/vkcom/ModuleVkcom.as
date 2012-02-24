@@ -23,8 +23,8 @@ import flash.utils.getTimer;
  * Модуль поддержки API vk.com
  * {@link:http://vk.com/developers.php}
  */
-public class NetworkModuleVkcom implements INetworkModule {
-    public function NetworkModuleVkcom() {
+public class ModuleVkcom implements INetworkModule {
+    public function ModuleVkcom() {
     }
 
     public function isAvailable(context:INetworkModuleContext):Boolean {

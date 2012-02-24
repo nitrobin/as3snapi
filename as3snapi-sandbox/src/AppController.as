@@ -24,12 +24,12 @@ import as3snapi.feautures.basic.uids.IdsHandler;
 import as3snapi.feautures.core.log.FeatureLogTrace;
 import as3snapi.modules.bus.BusModuleLogHook;
 import as3snapi.modules.networks.mailru.ConfigMailru;
-import as3snapi.modules.networks.mailru.NetworkModuleMailru;
+import as3snapi.modules.networks.mailru.ModuleMailru;
 import as3snapi.modules.networks.mock.ConfigMock;
 import as3snapi.modules.networks.mock.MockDataCapture;
-import as3snapi.modules.networks.mock.NetworkModuleMock;
+import as3snapi.modules.networks.mock.ModuleMock;
 import as3snapi.modules.networks.vkcom.ConfigVkcom;
-import as3snapi.modules.networks.vkcom.NetworkModuleVkcom;
+import as3snapi.modules.networks.vkcom.ModuleVkcom;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomApiCore;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomApiUi;
 
@@ -68,9 +68,9 @@ public class AppController implements INetworkConnectHandler {
                     new ConfigMock().setData(null).setDataUrl("mock.json.html"),
                 ],
                 new <INetworkModule>[
-                    new NetworkModuleVkcom(),
-                    new NetworkModuleMailru(),
-                    new NetworkModuleMock(),
+                    new ModuleVkcom(),
+                    new ModuleMailru(),
+                    new ModuleMock(),
                 ],
                 new <IBusModule>[
                     new BusModuleLogHook(app.log, app.apiLog, app.eventLog)

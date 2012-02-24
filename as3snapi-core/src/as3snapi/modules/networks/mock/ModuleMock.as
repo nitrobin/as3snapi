@@ -10,8 +10,8 @@ import as3snapi.modules.networks.mock.impl.MockApiImpl;
 /**
  * Модуль поддержки API vk.com
  */
-public class NetworkModuleMock implements INetworkModule {
-    public function NetworkModuleMock() {
+public class ModuleMock implements INetworkModule {
+    public function ModuleMock() {
     }
 
     public function isAvailable(context:INetworkModuleContext):Boolean {
