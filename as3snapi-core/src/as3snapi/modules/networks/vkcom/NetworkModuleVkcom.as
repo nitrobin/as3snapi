@@ -12,7 +12,6 @@ import as3snapi.modules.networks.vkcom.features.IFeatureVkcomMethods;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomRequester;
 import as3snapi.modules.networks.vkcom.impl.VkcomApiCore;
 import as3snapi.modules.networks.vkcom.impl.VkcomApiUi;
-import as3snapi.modules.networks.vkcom.impl.VkcomEventsJs;
 import as3snapi.modules.networks.vkcom.impl.VkcomMethodsJs;
 import as3snapi.modules.networks.vkcom.impl.VkcomRequesterJs;
 import as3snapi.modules.networks.vkcom.impl.VkcomRequesterRest;
@@ -47,9 +46,8 @@ public class NetworkModuleVkcom implements INetworkModule {
 //        if (js.isAvailable()) {
         if (jsCallbacksAvailable(js)) {
             context.log("Using JavaScript driver");
-            bus.addFeature(IFeatureVkcomRequester, new VkcomRequesterJs(state));
-            bus.addFeature(IFeatureVkcomMethods, new VkcomMethodsJs(state));
-            new VkcomEventsJs(state);
+            bus.addFeature(IFeatureVkcomRequester, new VkcomRequesterJs(state, context));
+            bus.addFeature(IFeatureVkcomMethods, new VkcomMethodsJs(state, context));
             bus.addFeature(IFeatureAsyncInit, new VkcomJsAsyncInit(context));
         } else {
             context.log("Using HTTP-REST driver");
@@ -58,12 +56,12 @@ public class NetworkModuleVkcom implements INetworkModule {
         }
 
         if (bus.hasFeature(IFeatureVkcomMethods)) {
-            var apiUi:VkcomApiUi = new VkcomApiUi(state);
+            var apiUi:VkcomApiUi = new VkcomApiUi(state, context);
             bus.addFeature(IFeatureVkcomApiUi, apiUi);
             FeaturesHelper.installBasicFeatures(bus, apiUi);
         }
 
-        var apiCore:VkcomApiCore = new VkcomApiCore(state);
+        var apiCore:VkcomApiCore = new VkcomApiCore(state, context);
         bus.addFeature(IFeatureVkcomApiCore, apiCore);
         FeaturesHelper.installBasicFeatures(bus, apiCore);
     }
@@ -88,19 +86,16 @@ public class NetworkModuleVkcom implements INetworkModule {
 import as3snapi.core.INetworkModuleContext;
 import as3snapi.feautures.basic.init.IAsyncInitHandler;
 import as3snapi.feautures.basic.init.IFeatureAsyncInit;
-import as3snapi.feautures.core.javascript.IFeatureJavaScript;
 import as3snapi.feautures.core.javascript.JavaScriptUtils;
 
 /**
  * Инициалозация JS API
  */
 internal class VkcomJsAsyncInit implements IFeatureAsyncInit {
-    private var js:IFeatureJavaScript;
     private var jsUtils:JavaScriptUtils;
 
     public function VkcomJsAsyncInit(context:INetworkModuleContext) {
-        this.js = context.getJavaScript();
-        this.jsUtils = new JavaScriptUtils(js);
+        this.jsUtils = context.getJavaScriptUtils();
     }
 
     public function init(handler:IAsyncInitHandler):void {

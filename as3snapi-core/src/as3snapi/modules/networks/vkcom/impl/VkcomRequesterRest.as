@@ -3,6 +3,7 @@ import as3snapi.core.INetworkModuleContext;
 import as3snapi.feautures.core.requester.IFeatureHttpRequester;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomRequester;
 import as3snapi.utils.Md5Utils;
+import as3snapi.utils.ObjectUtils;
 
 import flash.net.URLRequestMethod;
 import flash.utils.setTimeout;
@@ -16,11 +17,10 @@ public class VkcomRequesterRest implements IFeatureVkcomRequester {
         this.state = state;
         this.context = context;
         this.requester = context.getHttpRequester();
-        state.api_url
     }
 
     public function apiCall(method:String, params:Object, onSuccess:Function, onFail:Function):void {
-        var requestParams:Object = mergeTo(params, {
+        var requestParams:Object = ObjectUtils.merge(params, {
             method:method,
             api_id:state.api_id,
             format:"JSON",
@@ -55,11 +55,5 @@ public class VkcomRequesterRest implements IFeatureVkcomRequester {
         return Md5Utils.hash(sigData);
     }
 
-    private function mergeTo(from:Object, to:Object):Object {
-        for (var k:String in from) {
-            to[k] = from[k];
-        }
-        return to;
-    }
 }
 }

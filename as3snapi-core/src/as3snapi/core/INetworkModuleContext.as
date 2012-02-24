@@ -2,6 +2,7 @@ package as3snapi.core {
 import as3snapi.bus.IMutableBus;
 import as3snapi.feautures.core.flashvars.FlashVars;
 import as3snapi.feautures.core.javascript.IFeatureJavaScript;
+import as3snapi.feautures.core.javascript.JavaScriptUtils;
 import as3snapi.feautures.core.log.IFeatureLog;
 import as3snapi.feautures.core.requester.IFeatureHttpRequester;
 
@@ -31,5 +32,7 @@ public interface INetworkModuleContext {
     function apiLog(msg:*):void;
 
     function eventLog(msg:*):void;
+
+    function getJavaScriptUtils():JavaScriptUtils;
 }
 }

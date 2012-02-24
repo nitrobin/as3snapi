@@ -1,4 +1,5 @@
 package as3snapi.modules.networks.mailru.impl {
+import as3snapi.core.INetworkModuleContext;
 import as3snapi.feautures.basic.IFeatureAppId;
 import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
@@ -43,9 +44,9 @@ public class MailruApiImpl implements IFeatureMailruApiCore,
 
     private static const CRITICAL_TIMEOUT:int = 10000;
 
-    public function MailruApiImpl(state:MailruState) {
+    public function MailruApiImpl(state:MailruState, context:INetworkModuleContext) {
         this.state = state;
-        this.js = state.context.getJavaScript();
+        this.js = context.getJavaScript();
         //TODO: Баг флэш плеера или Chromium? js.getObjectId() может возвращать null если флэшка загружена на сервер mail.ru
         var objectId:String = js.getObjectId() || "flash-app";
         this.jsUtils = new JavaScriptUtils(js, objectId);

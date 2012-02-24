@@ -1,5 +1,6 @@
 package as3snapi.modules.networks.vkcom.impl {
 import as3snapi.bus.IMutableBus;
+import as3snapi.core.INetworkModuleContext;
 import as3snapi.feautures.basic.IFeatureAppId;
 import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
@@ -26,9 +27,9 @@ public class VkcomApiCore implements IFeatureVkcomApiCore,
     private var state:VkcomState;
     private var requester:IFeatureVkcomRequester;
 
-    public function VkcomApiCore(state:VkcomState) {
+    public function VkcomApiCore(state:VkcomState, context:INetworkModuleContext) {
         this.state = state;
-        var bus:IMutableBus = state.context.getBus();
+        var bus:IMutableBus = context.getBus();
         this.requester = bus.getFeature(IFeatureVkcomRequester);
     }
 

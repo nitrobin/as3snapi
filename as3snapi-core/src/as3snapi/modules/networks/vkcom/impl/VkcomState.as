@@ -4,7 +4,7 @@ import as3snapi.feautures.core.flashvars.FlashVars;
 import as3snapi.modules.networks.vkcom.ConfigVkcom;
 
 public class VkcomState {
-    internal var context:INetworkModuleContext;
+    private var context:INetworkModuleContext;
     internal var config:ConfigVkcom;
 
     internal var api_id:String;

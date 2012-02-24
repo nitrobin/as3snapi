@@ -228,6 +228,7 @@ import as3snapi.feautures.core.event.IFeatureEventDispatcher;
 import as3snapi.feautures.core.flashvars.FlashVars;
 import as3snapi.feautures.core.flashvars.IFeatureFlashVarsGetter;
 import as3snapi.feautures.core.javascript.IFeatureJavaScript;
+import as3snapi.feautures.core.javascript.JavaScriptUtils;
 import as3snapi.feautures.core.log.FeatureLogTrace;
 import as3snapi.feautures.core.log.IFeatureLog;
 import as3snapi.feautures.core.requester.IFeatureHttpRequester;
@@ -373,6 +374,7 @@ internal class NetworkModuleContext implements INetworkModuleContext {
     private var fHttpRequester:IFeatureHttpRequester;
     private var fJavaScript:IFeatureJavaScript;
     private var fEventDispatcher:IFeatureEventDispatcher;
+    private var jsUtils:JavaScriptUtils;
 
 
     public function NetworkModuleContext(bus:IMutableBus, config:INetworkConfig) {
@@ -423,5 +425,12 @@ internal class NetworkModuleContext implements INetworkModuleContext {
 
     public function eventLog(msg:*):void {
         fLog.eventLog("EVENT: " + FeatureLogTrace.universalDump(msg));
+    }
+
+    public function getJavaScriptUtils():JavaScriptUtils {
+        if (jsUtils == null) {
+            jsUtils = new JavaScriptUtils(fJavaScript);
+        }
+        return jsUtils;
     }
 }

@@ -39,7 +39,7 @@ public class NetworkModuleMailru implements INetworkModule {
             throw new Error();
         }
 
-        var apiCore:MailruApiImpl = new MailruApiImpl(state);
+        var apiCore:MailruApiImpl = new MailruApiImpl(state, context);
         bus.addFeature(IFeatureMailruApiCore, apiCore);
         FeaturesHelper.installBasicFeatures(bus, apiCore);
         bus.addFeature(IFeatureAsyncInit, apiCore);

@@ -30,6 +30,5 @@ public class ConfigMock extends NetworkConfigBase implements INetworkConfig {
         return dataUrl;
     }
 
-
 }
 }
