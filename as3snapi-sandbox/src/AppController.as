@@ -28,6 +28,8 @@ import as3snapi.modules.networks.mailru.ModuleMailru;
 import as3snapi.modules.networks.mock.ConfigMock;
 import as3snapi.modules.networks.mock.MockDataCapture;
 import as3snapi.modules.networks.mock.ModuleMock;
+import as3snapi.modules.networks.odnoklassnikiru.ConfigOdnoklassnikiru;
+import as3snapi.modules.networks.odnoklassnikiru.ModuleOdnoklassnikiru;
 import as3snapi.modules.networks.vkcom.ConfigVkcom;
 import as3snapi.modules.networks.vkcom.ModuleVkcom;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomApiCore;
@@ -64,12 +66,14 @@ public class AppController implements INetworkConnectHandler {
                 app.parameters,
                 new <INetworkConfig>[
                     new ConfigVkcom(),
-                    new ConfigMailru("6cb13ffe86243b89c815376cb1bd1495"),
+                    new ConfigMailru("PRIVATE_KEY"),
+                    new ConfigOdnoklassnikiru("SECRET_KEY"),
                     new ConfigMock().setData(null).setDataUrl("mock.json.html"),
                 ],
                 new <INetworkModule>[
                     new ModuleVkcom(),
                     new ModuleMailru(),
+                    new ModuleOdnoklassnikiru(),
                     new ModuleMock(),
                 ],
                 new <IBusModule>[
