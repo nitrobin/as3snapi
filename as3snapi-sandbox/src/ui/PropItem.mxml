@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<s:HGroup xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+          verticalAlign="middle">
+    <s:Label text="{label}" width="200"/>
+    <s:TextInput text="@{value}" width="200"/>
+    <fx:Script><![CDATA[
+        [Bindable]
+        public var label:String;
+        [Bindable]
+        public var value:String;
+        ]]></fx:Script>
+</s:HGroup>

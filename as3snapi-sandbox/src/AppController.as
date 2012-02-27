@@ -49,6 +49,15 @@ import ui.MainPanel;
 public class AppController implements INetworkConnectHandler {
     private var view:MainPanel;
     private var connection:INetworkConnection;
+    private var mockData:Object = {
+        shortNetworkId:"mock",
+        userId:1,
+        inviterId:2,
+        asppId:123,
+        profiles:{1:{fullName:"test1"}, 2:{fullName:"test1"}, 3:{fullName:"test1"}},
+        appFriendsUids:[2],
+        friendsUids:[2, 3]
+    };
 
     public function AppController(view:MainPanel) {
         this.view = view;
@@ -56,22 +65,14 @@ public class AppController implements INetworkConnectHandler {
 
     public function connect():void {
         log("configuring..");
-        var mockData:Object = {
-            shortNetworkId:"mock",
-            userId:1,
-            inviterId:2,
-            asppId:123,
-            profiles:{1:{fullName:"test1"}, 2:{fullName:"test1"}, 3:{fullName:"test1"}},
-            appFriendsUids:[2],
-            friendsUids:[2, 3]
-        };
+        var props:Settings = new Settings();
         var factory:IConnectionFactory = new ConnectionFactory(
                 FlexGlobals.topLevelApplication.parameters,
                 new <INetworkConfig>[
                     new ConfigVkcom(),
-                    new ConfigMailru("PRIVATE_KEY"),
-                    new ConfigOdnoklassnikiru("SECRET_KEY"),
-                    new ConfigMock().setData(null).setDataUrl("mock.json.html"),
+                    new ConfigMailru(props.MAILRU_PRIVATE_KEY),
+                    new ConfigOdnoklassnikiru(props.ODNOKLASSNIKI_SECRET_KEY),
+                    new ConfigMock().setData(mockData).setDataUrl("mock.json.html"),
                 ],
                 new <INetworkModule>[
                     new ModuleVkcom(),
