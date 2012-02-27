@@ -2,13 +2,13 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark">
 
     <s:HGroup>
-        <s:Image source="{avatarUrl}" width="80" height="80" />
+        <s:Image source="{avatarUrl}" width="80" height="80"/>
         <s:Group>
-            <s:TextArea id="infoTA" width="350" height="80" editable="false" text="{raw?rawData:info}" />
+            <s:TextArea id="infoTA" width="350" height="80" editable="false" text="{raw?rawData:info}"/>
         </s:Group>
         <s:VGroup>
-            <s:ToggleButton label="Raw data" selected="@{raw}" />
-            <s:Button label="Copy to clipboard" click="button1_clickHandler(event)" />
+            <s:ToggleButton label="Raw data" selected="@{raw}"/>
+            <s:Button label="Copy to clipboard" click="button1_clickHandler(event)"/>
         </s:VGroup>
     </s:HGroup>
 

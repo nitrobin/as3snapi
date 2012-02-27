@@ -39,16 +39,19 @@ import flash.events.MouseEvent;
 
 import mx.collections.ArrayList;
 import mx.controls.Alert;
+import mx.core.FlexGlobals;
 import mx.events.CloseEvent;
 
 import spark.components.Button;
 
+import ui.MainPanel;
+
 public class AppController implements INetworkConnectHandler {
-    private var app:SandboxMain;
+    private var view:MainPanel;
     private var connection:INetworkConnection;
 
-    public function AppController(app:SandboxMain) {
-        this.app = app;
+    public function AppController(view:MainPanel) {
+        this.view = view;
     }
 
     public function connect():void {
@@ -63,7 +66,7 @@ public class AppController implements INetworkConnectHandler {
             friendsUids:[2, 3]
         };
         var factory:IConnectionFactory = new ConnectionFactory(
-                app.parameters,
+                FlexGlobals.topLevelApplication.parameters,
                 new <INetworkConfig>[
                     new ConfigVkcom(),
                     new ConfigMailru("PRIVATE_KEY"),
@@ -77,7 +80,7 @@ public class AppController implements INetworkConnectHandler {
                     new ModuleMock(),
                 ],
                 new <IBusModule>[
-                    new BusModuleLogHook(app.log, app.apiLog, app.eventLog)
+                    new BusModuleLogHook(view.log, view.apiLog, view.eventLog)
                 ]
         );
         log("try connecting...");
@@ -87,15 +90,15 @@ public class AppController implements INetworkConnectHandler {
         } catch (e:Error) {
             log(e.getStackTrace());
         }
-        app.profilesLoadBtn.addEventListener(MouseEvent.CLICK, loadProfile)
+        view.profilesLoadBtn.addEventListener(MouseEvent.CLICK, loadProfile)
     }
 
     private function loadProfile(event:MouseEvent):void {
         if (connection && connection.hasFeature(IFeatureProfiles)) {
             var profiles:IFeatureProfiles = connection.getFeature(IFeatureProfiles);
-            profiles.getProfiles(app.profilesUserIdTI.text.split(','), new ProfilesHandler(function (profiles:Array):void {
+            profiles.getProfiles(view.profilesUserIdTI.text.split(','), new ProfilesHandler(function (profiles:Array):void {
                 for each(var p:IProfile in profiles) {
-                    app.profiles.addItemAt(p, 0);
+                    view.profiles.addItemAt(p, 0);
                 }
             }, function (result:Object):void {
                 log(result);
@@ -104,7 +107,7 @@ public class AppController implements INetworkConnectHandler {
     }
 
     private function log(msg:*):void {
-        app.log(msg);
+        view.log(msg);
     }
 
     private function logLine():void {
@@ -126,7 +129,7 @@ public class AppController implements INetworkConnectHandler {
             addBtn("Capture mock data", function (e:MouseEvent):void {
                 var mockCapture:MockDataCapture = new MockDataCapture(connection.getBus());
                 mockCapture.capture(function (data:Object):void {
-                    Alert.show("Captured", "Mock data", Alert.OK, app, function (e:CloseEvent):void {
+                    Alert.show("Captured", "Mock data", Alert.OK, view, function (e:CloseEvent):void {
                         mockCapture.saveFile();
                     });
                 }, function (r:Object):void {
@@ -158,7 +161,7 @@ public class AppController implements INetworkConnectHandler {
         var fUserId:IFeatureUserId = connection.getFeature(IFeatureUserId)
         if (fUserId != null) {
             log("IFeatureUserId: " + fUserId.getUserId());
-            app.profilesUserIdTI.text = fUserId.getUserId();
+            view.profilesUserIdTI.text = fUserId.getUserId();
         } else {
             log("IFeatureUserId - UNSUPPORTED");
         }
@@ -270,7 +273,7 @@ public class AppController implements INetworkConnectHandler {
                             new ProfilesHandler(function (profiles:Array):void {
 //                                    log("IFeatureFriendsProfiles: " + FeatureLogTrace.universalDump(profiles));
                                 log("IFeatureFriendsProfiles: " + profiles.length + " item(s)");
-                                app.friendsProfiles = new ArrayList(profiles);
+                                view.friendsProfiles = new ArrayList(profiles);
                                 next();
                             }, function (result:Object):void {
                                 log("IFeatureFriendsProfiles: FAIL " + FeatureLogTrace.universalDump(result));
@@ -289,7 +292,7 @@ public class AppController implements INetworkConnectHandler {
                             new ProfilesHandler(function (profiles:Array):void {
 //                                    log("IFeatureAppFriendsProfiles: " + FeatureLogTrace.universalDump(profiles));
                                 log("IFeatureAppFriendsProfiles: " + profiles.length + " item(s)");
-                                app.appFriendsProfiles = new ArrayList(profiles);
+                                view.appFriendsProfiles = new ArrayList(profiles);
                                 next();
                             }, function (result:Object):void {
                                 log("IFeatureAppFriendsProfiles: FAIL " + FeatureLogTrace.universalDump(result));
@@ -320,22 +323,25 @@ public class AppController implements INetworkConnectHandler {
             },
         ];
 
+        log("Start async test..");
+        next();
+
         function next():void {
             logLine();
             if (asyncs.length > 0) {
                 var func:Function = asyncs.shift();
                 func();
+            } else {
+                log("Async test finished.");
             }
         }
-
-        next();
     }
 
     private function addBtn(label:String, clickHandler:Function):void {
         var b:Button = new Button();
         b.label = label;
         b.addEventListener(MouseEvent.CLICK, clickHandler);
-        app.btns.addElement(b);
+        view.btns.addElement(b);
     }
 }
 }
