@@ -72,9 +72,7 @@ public class AppController implements INetworkConnectHandler {
                     new ConfigVkcom(),
                     new ConfigMailru(props.MAILRU_PRIVATE_KEY),
                     new ConfigOdnoklassnikiru(props.ODNOKLASSNIKI_SECRET_KEY),
-                    new ConfigMock()
-                        //.setData(mockData)
-                            .setDataUrl("mock.json.html"),
+                    new ConfigMock().setData(mockData)//.setDataUrl("mock.json.html"),
                 ],
                 new <INetworkModule>[
                     new ModuleVkcom(),
