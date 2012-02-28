@@ -1,6 +1,6 @@
 package as3snapi.modules.networks.odnoklassnikiru.impl {
 import as3snapi.core.INetworkModuleContext;
-import as3snapi.feautures.basic.IFeatureAppId;
+import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.init.IAsyncInitHandler;
@@ -23,7 +23,7 @@ import flash.net.URLRequestMethod;
 
 public class OdnoklassnikiruApiImpl implements IFeatureOdnoklassnikiApi,
         IFeatureAsyncInit,
-        IFeatureAppId,
+        IFeatureNetworkId,
         IFeatureUserId,
         IFeatureRefererId,
         IFeatureInvitePopup,
@@ -48,7 +48,7 @@ public class OdnoklassnikiruApiImpl implements IFeatureOdnoklassnikiApi,
         });
     }
 
-    public function getAppId():String {
+    public function getShortNetworkId():String {
         return "ok";
     }
 
