@@ -5,6 +5,7 @@ import as3snapi.core.INetworkModuleContext;
 import as3snapi.feautures.FeaturesHelper;
 import as3snapi.feautures.basic.init.IFeatureAsyncInit;
 import as3snapi.feautures.core.flashvars.FlashVars;
+import as3snapi.modules.networks.odnoklassnikiru.features.IFeatureOdnoklassnikiApi;
 import as3snapi.modules.networks.odnoklassnikiru.impl.OdnoklassnikiruApiImpl;
 import as3snapi.modules.networks.odnoklassnikiru.impl.OdnoklassnikiruState;
 
@@ -37,6 +38,7 @@ public class ModuleOdnoklassnikiru implements INetworkModule {
 
         var apiCore:OdnoklassnikiruApiImpl = new OdnoklassnikiruApiImpl(state, context);
         FeaturesHelper.installBasicFeatures(bus, apiCore);
+        bus.addFeature(IFeatureOdnoklassnikiApi, apiCore);
         bus.addFeature(IFeatureAsyncInit, apiCore);
     }
 }

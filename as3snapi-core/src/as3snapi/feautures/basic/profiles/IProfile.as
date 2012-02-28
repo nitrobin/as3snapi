@@ -9,7 +9,7 @@ public interface IProfile {
 
     function getAvatarUrl():String;
 
-    function getSex():String;
+    function getGender():String;
 
     function getRawData():Object;
 }

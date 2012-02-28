@@ -39,7 +39,7 @@
                 "fullName: " + profile.getFullName(),
                 "profileUrl: " + profile.getProfileUrl(),
                 "avatarUrl: " + profile.getAvatarUrl(),
-                "sex: " + profile.getSex()
+                "gender: " + profile.getGender()
             ].join("\n");
             rawData = JsonUtils.encode(profile.getRawData());
         }

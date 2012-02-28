@@ -83,7 +83,7 @@ public class VkcomApiCore implements IFeatureVkcomApiCore,
         profile.fullName = u.first_name + " " + u.last_name;
         //TODO photo_medium,photo_big
         profile.avatarUrl = u.photo;
-        profile.sex = GENDERS[u.sex];
+        profile.gender = GENDERS[u.sex];
         profile.setRawData(u);
         return profile;
     }

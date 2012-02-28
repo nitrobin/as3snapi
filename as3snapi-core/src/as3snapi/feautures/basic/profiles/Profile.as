@@ -5,7 +5,7 @@ public class Profile implements IProfile {
     public var profileUrl:String;
     public var fullName:String;
     public var avatarUrl:String;
-    public var sex:String;
+    public var gender:String;
     private var rawData:Object;
 
     public function Profile() {
@@ -27,8 +27,8 @@ public class Profile implements IProfile {
         return avatarUrl;
     }
 
-    public function getSex():String {
-        return sex;
+    public function getGender():String {
+        return gender;
     }
 
     public function getRawData():Object {

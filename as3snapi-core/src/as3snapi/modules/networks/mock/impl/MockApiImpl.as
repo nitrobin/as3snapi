@@ -76,7 +76,7 @@ public class MockApiImpl implements IFeatureMockApi,
         profile.avatarUrl = u.avatarUrl;
         profile.fullName = u.fullName;
         profile.profileUrl = u.profileUrl;
-        profile.sex = u.sex;
+        profile.gender = u.gender;
         profile.setRawData(u);
         return profile;
     }

@@ -120,7 +120,7 @@ public class MockDataCapture {
                 fullName:p.getFullName(),
                 avatarUrl:p.getAvatarUrl(),
                 profileUrl:p.getProfileUrl(),
-                sex:p.getSex()
+                gender:p.getGender()
             };
         }
     }
