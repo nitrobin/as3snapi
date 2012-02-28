@@ -116,7 +116,8 @@ public class MailruApiImpl implements IFeatureMailruApiCore,
         profile.userId = u.uid;
         profile.profileUrl = u.link;
         profile.fullName = u.first_name + " " + u.last_name;
-        profile.avatarUrl = u.pic;
+        profile.avatar = u.pic;
+        profile.photos = [u.pic_small, u.pic, u.pic_big];
         profile.gender = GENDERS[u.sex];
         profile.setRawData(u);
         return profile;

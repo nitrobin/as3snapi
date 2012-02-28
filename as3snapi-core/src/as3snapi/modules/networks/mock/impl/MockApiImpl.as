@@ -73,7 +73,8 @@ public class MockApiImpl implements IFeatureMockApi,
     private function parseProfile(u:Object, uid:String):IProfile {
         var profile:Profile = new Profile();
         profile.userId = uid;
-        profile.avatarUrl = u.avatarUrl;
+        profile.avatar = u.avatar;
+        profile.photos = u.photos;
         profile.fullName = u.fullName;
         profile.profileUrl = u.profileUrl;
         profile.gender = u.gender;

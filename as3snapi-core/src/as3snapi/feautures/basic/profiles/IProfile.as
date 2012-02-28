@@ -7,7 +7,9 @@ public interface IProfile {
 
     function getFullName():String;
 
-    function getAvatarUrl():String;
+    function getAvatar():String;
+
+    function getPhotos():Array;
 
     function getGender():String;
 

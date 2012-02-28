@@ -4,8 +4,10 @@ public class Profile implements IProfile {
     public var userId:String;
     public var profileUrl:String;
     public var fullName:String;
-    public var avatarUrl:String;
+    public var avatar:String;
+    public var photos:Array;
     public var gender:String;
+
     private var rawData:Object;
 
     public function Profile() {
@@ -23,8 +25,12 @@ public class Profile implements IProfile {
         return fullName;
     }
 
-    public function getAvatarUrl():String {
-        return avatarUrl;
+    public function getAvatar():String {
+        return avatar;
+    }
+
+    public function getPhotos():Array {
+        return photos;
     }
 
     public function getGender():String {

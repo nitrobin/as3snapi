@@ -81,8 +81,8 @@ public class VkcomApiCore implements IFeatureVkcomApiCore,
         profile.userId = u.uid;
         profile.profileUrl = "http://vk.com/id" + profile.userId;
         profile.fullName = u.first_name + " " + u.last_name;
-        //TODO photo_medium,photo_big
-        profile.avatarUrl = u.photo;
+        profile.avatar = u.photo;
+        profile.photos = [u.photo, u.photo_medium, u.photo_big];
         profile.gender = GENDERS[u.sex];
         profile.setRawData(u);
         return profile;

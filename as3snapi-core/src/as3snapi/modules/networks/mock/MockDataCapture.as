@@ -118,7 +118,8 @@ public class MockDataCapture {
             data.profiles[p.getUserId()] = {
                 userId:p.getUserId(),
                 fullName:p.getFullName(),
-                avatarUrl:p.getAvatarUrl(),
+                avatar:p.getAvatar(),
+                photos:p.getPhotos(),
                 profileUrl:p.getProfileUrl(),
                 gender:p.getGender()
             };

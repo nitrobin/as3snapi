@@ -87,14 +87,15 @@ public class OdnoklassnikiruApiImpl implements IFeatureOdnoklassnikiApi,
     }
 
 
-    private static const GENDERS:Object = {0:"m", 1:"f"};
+    private static const GENDERS:Object = {"male":"m", "female":"f"};
 
     private function parseProfile(u:Object, ...rest):IProfile {
         var profile:Profile = new Profile();
         profile.userId = u.uid;
         profile.profileUrl = u.url_profile;
         profile.fullName = u.first_name + " " + u.last_name;
-        profile.avatarUrl = u.pic_1;
+        profile.avatar = u.pic_1;
+        profile.photos = [u.pic_1, u.pic_2, u.pic_3, u.pic_4];
         profile.gender = GENDERS[u.gender];
         profile.setRawData(u);
         return profile;

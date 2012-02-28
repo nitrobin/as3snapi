@@ -2,7 +2,7 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark">
 
     <s:HGroup>
-        <s:Image source="{avatarUrl}" width="80" height="80"/>
+        <s:Image source="{avatarUrl}" width="90" height="90"/>
         <s:Group>
             <s:TextArea id="infoTA" width="350" height="80" editable="false" text="{raw?rawData:info}"/>
         </s:Group>
@@ -33,13 +33,14 @@
         override public function set data(value:Object):void {
             super.data = value;
             profile = IProfile(data);
-            avatarUrl = profile.getAvatarUrl();
+            avatarUrl = profile.getAvatar();
             info = [
                 "userId: " + profile.getUserId(),
                 "fullName: " + profile.getFullName(),
                 "profileUrl: " + profile.getProfileUrl(),
-                "avatarUrl: " + profile.getAvatarUrl(),
-                "gender: " + profile.getGender()
+                "gender: " + profile.getGender(),
+                "avatar: " + profile.getAvatar(),
+                "photos: " + JsonUtils.encode(profile.getPhotos())
             ].join("\n");
             rawData = JsonUtils.encode(profile.getRawData());
         }
