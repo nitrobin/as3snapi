@@ -7,6 +7,7 @@ import as3snapi.core.INetworkConnectHandler;
 import as3snapi.core.INetworkConnection;
 import as3snapi.core.INetworkModule;
 import as3snapi.feautures.basic.IFeatureAppId;
+import as3snapi.feautures.basic.IFeatureConfigGetter;
 import as3snapi.feautures.basic.IFeatureNetworkId;
 import as3snapi.feautures.basic.IFeatureRefererId;
 import as3snapi.feautures.basic.IFeatureUserId;
@@ -34,6 +35,7 @@ import as3snapi.modules.networks.vkcom.ConfigVkcom;
 import as3snapi.modules.networks.vkcom.ModuleVkcom;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomApiCore;
 import as3snapi.modules.networks.vkcom.features.IFeatureVkcomApiUi;
+import as3snapi.utils.JsonUtils;
 
 import flash.events.MouseEvent;
 

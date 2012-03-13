@@ -24,7 +24,12 @@ import flash.utils.getTimer;
  * {@link:http://vk.com/developers.php}
  */
 public class ModuleVkcom implements INetworkModule {
-    public function ModuleVkcom() {
+    public static const SHORT_NETWORK_ID:String = "vk";
+
+    private var shortNetworkId:String;
+
+    public function ModuleVkcom(shortNetworkId:String = null) {
+        this.shortNetworkId = shortNetworkId || SHORT_NETWORK_ID;
     }
 
     public function isAvailable(context:INetworkModuleContext):Boolean {
@@ -63,7 +68,7 @@ public class ModuleVkcom implements INetworkModule {
             FeaturesHelper.installBasicFeatures(bus, apiUi);
         }
 
-        var apiCore:VkcomApiCore = new VkcomApiCore(state, context);
+        var apiCore:VkcomApiCore = new VkcomApiCore(state, context, shortNetworkId);
         bus.addFeature(IFeatureVkcomApiCore, apiCore);
         FeaturesHelper.installBasicFeatures(bus, apiCore);
     }

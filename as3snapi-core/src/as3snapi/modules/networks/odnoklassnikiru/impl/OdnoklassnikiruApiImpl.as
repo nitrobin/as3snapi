@@ -34,10 +34,12 @@ public class OdnoklassnikiruApiImpl implements IFeatureOdnoklassnikiApi,
     private var context:INetworkModuleContext;
 
     private var requester:IFeatureHttpRequester;
+    private var shortNetworkId:String;
 
-    public function OdnoklassnikiruApiImpl(state:OdnoklassnikiruState, context:INetworkModuleContext) {
+    public function OdnoklassnikiruApiImpl(state:OdnoklassnikiruState, context:INetworkModuleContext, shortNetworkId:String) {
         this.state = state;
         this.context = context;
+        this.shortNetworkId = shortNetworkId;
         this.requester = context.getHttpRequester();
     }
 
@@ -49,7 +51,7 @@ public class OdnoklassnikiruApiImpl implements IFeatureOdnoklassnikiApi,
     }
 
     public function getShortNetworkId():String {
-        return "ok";
+        return shortNetworkId;
     }
 
     public function getUserId():String {

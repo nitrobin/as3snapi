@@ -1,12 +1,13 @@
 package as3snapi {
 import as3snapi.bus.BusImpl;
 import as3snapi.bus.IMutableBus;
-import as3snapi.core.BusEvent;
+import as3snapi.core.BusFactoryEvent;
 import as3snapi.core.IBusModule;
 import as3snapi.core.INetworkConfig;
 import as3snapi.core.INetworkConnectHandler;
 import as3snapi.core.INetworkModule;
 import as3snapi.core.INetworkModuleContext;
+import as3snapi.feautures.basic.IFeatureConfigGetter;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.init.AsyncInitHandler;
 import as3snapi.feautures.basic.init.IAsyncInitHandler;
@@ -104,13 +105,14 @@ public class ConnectionFactory implements IConnectionFactory {
 
         logFlashVars(bus);
 
-        bus.dispatchEvent(new BusEvent(BusEvent.BASIC_FEATURES_ADDED));
+        bus.dispatchEvent(new BusFactoryEvent(BusFactoryEvent.BASIC_FEATURES_ADDED));
 
         // Detect
         for each(var config:INetworkConfig in networkConfigs) {
             for each(var networkModule:INetworkModule in networkModules) {
                 var context:INetworkModuleContext = new NetworkModuleContext(bus, config);
                 if (networkModule.isAvailable(context)) {
+                    bus.addFeatureIfNotExist(IFeatureConfigGetter, new FeatureConfig(config));
                     doConnect(networkModule, context, handler);
                     return;
                 }
@@ -129,11 +131,11 @@ public class ConnectionFactory implements IConnectionFactory {
         // Добавляем IFeatureProfiles на основе IFeatureProfilesBase
         implementProfilesIfNotExist(bus);
 
-        bus.dispatchEvent(new BusEvent(BusEvent.SOCIAL_NETWORK_FEATURES_ADDED));
+        bus.dispatchEvent(new BusFactoryEvent(BusFactoryEvent.SOCIAL_NETWORK_FEATURES_ADDED));
 
         // Добавляем IFeature*Profiles на основе IFeatureProfiles
         implementHelperProfilesIfNotExist(bus);
-        bus.dispatchEvent(new BusEvent(BusEvent.FEATURES_READY));
+        bus.dispatchEvent(new BusFactoryEvent(BusFactoryEvent.FEATURES_READY));
 
         logFeatures(bus);
         var connection:NetworkConnection = new NetworkConnection(bus, context.getConfig());
@@ -219,6 +221,7 @@ import as3snapi.bus.IMutableBus;
 import as3snapi.core.INetworkConfig;
 import as3snapi.core.INetworkConnection;
 import as3snapi.core.INetworkModuleContext;
+import as3snapi.feautures.basic.IFeatureConfigGetter;
 import as3snapi.feautures.basic.IFeatureUserId;
 import as3snapi.feautures.basic.profiles.*;
 import as3snapi.feautures.basic.uids.IFeatureAppFriendUids;
@@ -235,6 +238,17 @@ import as3snapi.feautures.core.requester.IFeatureHttpRequester;
 
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
+
+internal class FeatureConfig implements IFeatureConfigGetter {
+    private var config:INetworkConfig;
+    public function FeatureConfig(config:INetworkConfig) {
+        this.config = config;
+    }
+
+    public function getConfig():INetworkConfig {
+        return config;
+    }
+}
 
 internal class FeatureFlashVarsGetter implements IFeatureFlashVarsGetter {
     private var flashVars:FlashVars;

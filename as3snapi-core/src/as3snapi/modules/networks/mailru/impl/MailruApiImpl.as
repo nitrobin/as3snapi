@@ -43,9 +43,11 @@ public class MailruApiImpl implements IFeatureMailruApiCore,
     private var events:IEventDispatcher;
 
     private static const CRITICAL_TIMEOUT:int = 10000;
+    private var shortNetworkId:String;
 
-    public function MailruApiImpl(state:MailruState, context:INetworkModuleContext) {
+    public function MailruApiImpl(state:MailruState, context:INetworkModuleContext, shortNetworkId:String) {
         this.state = state;
+        this.shortNetworkId = shortNetworkId;
         this.js = context.getJavaScript();
         //TODO: Баг флэш плеера или Chromium? js.getObjectId() может возвращать null если флэшка загружена на сервер mail.ru
         var objectId:String = js.getObjectId() || "flash-app";
@@ -71,7 +73,7 @@ public class MailruApiImpl implements IFeatureMailruApiCore,
     }
 
     public function getShortNetworkId():String {
-        return "mm";
+        return shortNetworkId;
     }
 
     public function getAppId():String {

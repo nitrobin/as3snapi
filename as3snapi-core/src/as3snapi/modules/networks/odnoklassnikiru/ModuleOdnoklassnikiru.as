@@ -14,7 +14,12 @@ import as3snapi.modules.networks.odnoklassnikiru.impl.OdnoklassnikiruState;
  * {@link:http://dev.odnoklassniki.ru/wiki/display/ok/Odnoklassniki+ActionScript+API}
  */
 public class ModuleOdnoklassnikiru implements INetworkModule {
-    public function ModuleOdnoklassnikiru() {
+    public static const SHORT_NETWORK_ID:String = "ok";
+
+    private var shortNetworkId:String;
+
+    public function ModuleOdnoklassnikiru(shortNetworkId:String = null) {
+        this.shortNetworkId = shortNetworkId || SHORT_NETWORK_ID;
     }
 
     public function isAvailable(context:INetworkModuleContext):Boolean {
@@ -36,7 +41,7 @@ public class ModuleOdnoklassnikiru implements INetworkModule {
         var bus:IMutableBus = context.getBus();
         var state:OdnoklassnikiruState = new OdnoklassnikiruState(context);
 
-        var apiCore:OdnoklassnikiruApiImpl = new OdnoklassnikiruApiImpl(state, context);
+        var apiCore:OdnoklassnikiruApiImpl = new OdnoklassnikiruApiImpl(state, context, shortNetworkId);
         FeaturesHelper.installBasicFeatures(bus, apiCore);
         bus.addFeature(IFeatureOdnoklassnikiApi, apiCore);
         bus.addFeature(IFeatureAsyncInit, apiCore);

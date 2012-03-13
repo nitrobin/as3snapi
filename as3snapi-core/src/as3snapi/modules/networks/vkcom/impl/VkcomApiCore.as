@@ -26,15 +26,17 @@ public class VkcomApiCore implements IFeatureVkcomApiCore,
 
     private var state:VkcomState;
     private var requester:IFeatureVkcomRequester;
+    private var shortNetworkId:String;
 
-    public function VkcomApiCore(state:VkcomState, context:INetworkModuleContext) {
+    public function VkcomApiCore(state:VkcomState, context:INetworkModuleContext, shortNetworkId:String) {
         this.state = state;
+        this.shortNetworkId = shortNetworkId;
         var bus:IMutableBus = context.getBus();
         this.requester = bus.getFeature(IFeatureVkcomRequester);
     }
 
     public function getShortNetworkId():String {
-        return "vk";
+        return shortNetworkId;
     }
 
     public function getAppId():String {

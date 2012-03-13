@@ -52,13 +52,5 @@ public class FeatureHttpRequester implements IFeatureHttpRequester {
             onSuccess(decode);
         }
     }
-
-    public function doRequest2(url:String, params:Object, method:String, dataFormat:String, handler:IHttpResponseHandler):void {
-        doRequest(url, params, method, dataFormat, handler.onSuccess, handler.onFail);
-    }
-
-    public function doRequestJson2(url:String, params:Object, method:String, handler:IHttpResponseJsonHandler):void {
-        doRequestJson(url, params, method, handler.onSuccess, handler.onFail);
-    }
 }
 }

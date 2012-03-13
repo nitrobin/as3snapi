@@ -11,8 +11,14 @@ import as3snapi.modules.networks.mock.impl.MockApiImpl;
  * Модуль поддержки API vk.com
  */
 public class ModuleMock implements INetworkModule {
-    public function ModuleMock() {
+    public static const SHORT_NETWORK_ID:String = "mock";
+
+    private var shortNetworkId:String;
+
+    public function ModuleMock(shortNetworkId:String = null) {
+        this.shortNetworkId = shortNetworkId || SHORT_NETWORK_ID;
     }
+
 
     public function isAvailable(context:INetworkModuleContext):Boolean {
         var flashVars:FlashVars = context.getFlashVars();
@@ -22,7 +28,7 @@ public class ModuleMock implements INetworkModule {
     public function install(context:INetworkModuleContext):void {
         var bus:IMutableBus = context.getBus();
 
-        var api:MockApiImpl = new MockApiImpl(context);
+        var api:MockApiImpl = new MockApiImpl(context, shortNetworkId);
         bus.addFeature(IFeatureMockApi, api);
         FeaturesHelper.installBasicFeatures(bus, api);
     }

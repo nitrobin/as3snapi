@@ -14,7 +14,12 @@ import as3snapi.modules.networks.mailru.impl.MailruState;
  * {@link:http://api.mail.ru/docs/}
  */
 public class ModuleMailru implements INetworkModule {
-    public function ModuleMailru() {
+    public static const SHORT_NETWORK_ID:String = "mm";
+
+    private var shortNetworkId:String;
+
+    public function ModuleMailru(shortNetworkId:String = null) {
+        this.shortNetworkId = shortNetworkId || SHORT_NETWORK_ID;
     }
 
     public function isAvailable(context:INetworkModuleContext):Boolean {
@@ -44,7 +49,7 @@ public class ModuleMailru implements INetworkModule {
             throw new Error();
         }
 
-        var apiCore:MailruApiImpl = new MailruApiImpl(state, context);
+        var apiCore:MailruApiImpl = new MailruApiImpl(state, context, shortNetworkId);
         bus.addFeature(IFeatureMailruApiCore, apiCore);
         FeaturesHelper.installBasicFeatures(bus, apiCore);
         bus.addFeature(IFeatureAsyncInit, apiCore);

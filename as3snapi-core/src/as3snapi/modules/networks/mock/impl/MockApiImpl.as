@@ -32,15 +32,17 @@ public class MockApiImpl implements IFeatureMockApi,
     private var data:Object;
 
     private var httpRequester:IFeatureHttpRequester;
+    private var shortNetworkId:String;
 
-    public function MockApiImpl(context:INetworkModuleContext) {
+    public function MockApiImpl(context:INetworkModuleContext, shortNetworkId:String) {
+        this.shortNetworkId = shortNetworkId;
         this.config = ConfigMock(context.getConfig());
         this.data = config.getData();
         this.httpRequester = context.getHttpRequester();
     }
 
     public function getShortNetworkId():String {
-        return data.shortNetworkId;
+        return data.shortNetworkId || shortNetworkId;
     }
 
     public function getAppId():String {
