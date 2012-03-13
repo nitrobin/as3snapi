@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
+          xmlns:s="library://ns.adobe.com/flex/spark"
+          xmlns:containers="library://ns.adobe.com/flex/mx"
+          creationComplete="creationCompleteHandler(event)">
+
+    <s:ButtonBar dataProvider="{pages}"/>
+    <containers:ViewStack id="pages" creationPolicy="all" width="100%" height="100%">
+        <s:NavigatorContent label="Log" width="100%" height="100%">
+            <s:VGroup width="100%" height="100%">
+                <!--<s:Button label="clear log" click="logTxt.text='';"/>-->
+                <s:TextArea width="100%" height="100%" id="logTxt" editable="false"/>
+            </s:VGroup>
+        </s:NavigatorContent>
+        <s:NavigatorContent label="apiLog" width="100%" height="100%">
+            <s:VGroup width="100%" height="100%">
+                <s:Button label="clear log" click="apiLogTxt.text='';"/>
+                <s:TextArea width="100%" height="100%" id="apiLogTxt" editable="false"/>
+            </s:VGroup>
+        </s:NavigatorContent>
+        <s:NavigatorContent label="eventLog" width="100%" height="100%">
+            <s:VGroup width="100%" height="100%">
+                <s:Button label="clear log" click="eventLogTxt.text='';"/>
+                <s:TextArea width="100%" height="100%" id="eventLogTxt" editable="false"/>
+            </s:VGroup>
+        </s:NavigatorContent>
+        <s:NavigatorContent label="friends" width="100%" height="100%">
+            <s:Scroller width="100%" height="100%">
+                <s:DataGroup itemRenderer="sandbox.ui.ProfileRenderer"
+                             id="friendsProfilesDG"
+                             dataProvider="{friendsProfiles}">
+                    <s:layout>
+                        <s:VerticalLayout useVirtualLayout="true"/>
+                    </s:layout>
+                </s:DataGroup>
+            </s:Scroller>
+        </s:NavigatorContent>
+        <s:NavigatorContent label="appFriends" width="100%" height="100%">
+            <s:Scroller width="100%" height="100%">
+                <s:DataGroup itemRenderer="sandbox.ui.ProfileRenderer"
+                             id="appFriendsProfilesDG"
+                             dataProvider="{appFriendsProfiles}">
+                    <s:layout>
+                        <s:VerticalLayout useVirtualLayout="true"/>
+                    </s:layout>
+                </s:DataGroup>
+            </s:Scroller>
+        </s:NavigatorContent>
+        <s:NavigatorContent label="profiles" width="100%" height="100%">
+            <s:VGroup width="100%" height="100%">
+                <s:HGroup>
+                    <s:TextInput id="profilesUserIdTI" width="200"/>
+                    <s:Button id="profilesLoadBtn" label="load profiles"/>
+                    <s:Button label="clean history" click="profiles =  new ArrayList()"/>
+                </s:HGroup>
+                <s:Scroller width="100%" height="100%">
+                    <s:DataGroup itemRenderer="sandbox.ui.ProfileRenderer"
+                                 id="profilesDG"
+                                 dataProvider="{profiles}">
+                        <s:layout>
+                            <s:VerticalLayout useVirtualLayout="true"/>
+                        </s:layout>
+                    </s:DataGroup>
+                </s:Scroller>
+            </s:VGroup>
+        </s:NavigatorContent>
+        <s:NavigatorContent label="uiFeatures" width="100%" height="100%">
+            <s:Scroller width="100%" height="100%">
+                <s:VGroup id="btns"/>
+            </s:Scroller>
+        </s:NavigatorContent>
+    </containers:ViewStack>
+    <fx:Script><![CDATA[
+        import as3snapi.base.features.log.FeatureLogTrace;
+
+        import mx.collections.ArrayList;
+        import mx.collections.IList;
+        import mx.events.FlexEvent;
+
+        import sandbox.AppController;
+
+        [Bindable]
+        public var friendsProfiles:IList;
+        [Bindable]
+        public var appFriendsProfiles:IList;
+        [Bindable]
+        public var profiles:IList = new ArrayList();
+        private var appController:AppController;
+
+        private function creationCompleteHandler(event:FlexEvent):void {
+//TODO:            loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, uncaughtErrorHandler);
+            appController = new AppController(this);
+            appController.connect();
+//            setTimeout(function(){throw new Error("");},1000);
+        }
+
+        //        private function uncaughtErrorHandler(event:UncaughtErrorEvent):void {
+        //            log(event.error);
+        //        }
+
+        public function log(msg:*):void {
+            logTxt.text = logTxt.text + FeatureLogTrace.universalDump(msg) + "\n";
+            FeatureLogTrace.universalTrace(msg);
+        }
+
+        public function apiLog(msg:*):void {
+            apiLogTxt.text = apiLogTxt.text + FeatureLogTrace.universalDump(msg) + "\n";
+        }
+
+        public function eventLog(msg:*):void {
+            eventLogTxt.text = eventLogTxt.text + FeatureLogTrace.universalDump(msg) + "\n";
+        }
+        ]]></fx:Script>
+</s:VGroup>

@@ -1,9 +1,9 @@
-package as3snapi.bus {
+package as3snapi.utils.bus {
 
 [Test]
 public class MixinTest {
 
-    [Test(expects="as3snapi.bus.UnsupportedFeatureError")]
+    [Test(expects="as3snapi.utils.bus.UnsupportedFeatureError")]
     public function testDictMixinThrows():void {
         var mixin:IMutableBus = new BusImpl();
         mixin.addFeature(Number, "");

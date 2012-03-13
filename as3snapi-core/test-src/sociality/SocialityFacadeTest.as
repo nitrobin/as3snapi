@@ -1,10 +1,10 @@
 package as3snapi {
 import as3snapi.ISocialityConnection;
-import as3snapi.core.INetworkModule;
-import as3snapi.core.INetworkModuleContext;
-import as3snapi.core.INetworkConnectHandler;
-import as3snapi.core.INetworkConnection;
-import as3snapi.feautures.core.flashvars.FlashVars;
+import as3snapi.base.INetworkModule;
+import as3snapi.base.INetworkModuleContext;
+import as3snapi.api.INetworkConnectHandler;
+import as3snapi.api.INetworkConnection;
+import as3snapi.base.features.flashvars.FlashVars;
 
 import flash.events.Event;
 

@@ -1,34 +1,34 @@
 package as3snapi {
-import as3snapi.bus.BusImpl;
-import as3snapi.bus.IMutableBus;
-import as3snapi.core.BusFactoryEvent;
-import as3snapi.core.IBusModule;
-import as3snapi.core.INetworkConfig;
-import as3snapi.core.INetworkConnectHandler;
-import as3snapi.core.INetworkModule;
-import as3snapi.core.INetworkModuleContext;
-import as3snapi.feautures.basic.IFeatureConfigGetter;
-import as3snapi.feautures.basic.IFeatureUserId;
-import as3snapi.feautures.basic.init.AsyncInitHandler;
-import as3snapi.feautures.basic.init.IAsyncInitHandler;
-import as3snapi.feautures.basic.init.IFeatureAsyncInit;
-import as3snapi.feautures.basic.profiles.IFeatureAppFriendsProfiles;
-import as3snapi.feautures.basic.profiles.IFeatureFriendsProfiles;
-import as3snapi.feautures.basic.profiles.IFeatureProfiles;
-import as3snapi.feautures.basic.profiles.IFeatureProfilesBase;
-import as3snapi.feautures.basic.profiles.IFeatureSelfProfile;
-import as3snapi.feautures.basic.uids.IFeatureAppFriendUids;
-import as3snapi.feautures.basic.uids.IFeatureFriendUids;
-import as3snapi.feautures.core.event.IFeatureEventDispatcher;
-import as3snapi.feautures.core.flashvars.FlashVars;
-import as3snapi.feautures.core.flashvars.IFeatureFlashVarsGetter;
-import as3snapi.feautures.core.javascript.FeatureJavaScript;
-import as3snapi.feautures.core.javascript.IFeatureJavaScript;
-import as3snapi.feautures.core.log.FeatureLogNULL;
-import as3snapi.feautures.core.log.IFeatureLog;
-import as3snapi.feautures.core.requester.FeatureHttpRequester;
-import as3snapi.feautures.core.requester.IFeatureHttpRequester;
+import as3snapi.api.INetworkConnectHandler;
+import as3snapi.api.feautures.IFeatureEventDispatcher;
+import as3snapi.api.feautures.social.IFeatureUserId;
+import as3snapi.api.feautures.social.profiles.IFeatureAppFriendsProfiles;
+import as3snapi.api.feautures.social.profiles.IFeatureFriendsProfiles;
+import as3snapi.api.feautures.social.profiles.IFeatureProfiles;
+import as3snapi.api.feautures.social.profiles.IFeatureProfilesBase;
+import as3snapi.api.feautures.social.profiles.IFeatureSelfProfile;
+import as3snapi.api.feautures.social.uids.IFeatureAppFriendUids;
+import as3snapi.api.feautures.social.uids.IFeatureFriendUids;
+import as3snapi.base.INetworkConfig;
+import as3snapi.base.INetworkModule;
+import as3snapi.base.INetworkModuleContext;
+import as3snapi.base.features.IFeatureConfigGetter;
+import as3snapi.base.features.asyncinit.AsyncInitHandler;
+import as3snapi.base.features.asyncinit.IAsyncInitHandler;
+import as3snapi.base.features.asyncinit.IFeatureAsyncInit;
+import as3snapi.base.features.flashvars.FlashVars;
+import as3snapi.base.features.flashvars.IFeatureFlashVarsGetter;
+import as3snapi.base.features.javascript.FeatureJavaScript;
+import as3snapi.base.features.javascript.IFeatureJavaScript;
+import as3snapi.base.features.log.FeatureLogNULL;
+import as3snapi.base.features.log.IFeatureLog;
+import as3snapi.base.features.requester.FeatureHttpRequester;
+import as3snapi.base.features.requester.IFeatureHttpRequester;
+import as3snapi.plugins.BusFactoryEvent;
+import as3snapi.plugins.IBusModule;
 import as3snapi.utils.EnumUtils;
+import as3snapi.utils.bus.BusImpl;
+import as3snapi.utils.bus.IMutableBus;
 
 public class ConnectionFactory implements IConnectionFactory {
 
@@ -216,31 +216,32 @@ public class ConnectionFactory implements IConnectionFactory {
 }
 }
 
-import as3snapi.bus.IBus;
-import as3snapi.bus.IMutableBus;
-import as3snapi.core.INetworkConfig;
-import as3snapi.core.INetworkConnection;
-import as3snapi.core.INetworkModuleContext;
-import as3snapi.feautures.basic.IFeatureConfigGetter;
-import as3snapi.feautures.basic.IFeatureUserId;
-import as3snapi.feautures.basic.profiles.*;
-import as3snapi.feautures.basic.uids.IFeatureAppFriendUids;
-import as3snapi.feautures.basic.uids.IFeatureFriendUids;
-import as3snapi.feautures.basic.uids.IdsHandler;
-import as3snapi.feautures.core.event.IFeatureEventDispatcher;
-import as3snapi.feautures.core.flashvars.FlashVars;
-import as3snapi.feautures.core.flashvars.IFeatureFlashVarsGetter;
-import as3snapi.feautures.core.javascript.IFeatureJavaScript;
-import as3snapi.feautures.core.javascript.JavaScriptUtils;
-import as3snapi.feautures.core.log.FeatureLogTrace;
-import as3snapi.feautures.core.log.IFeatureLog;
-import as3snapi.feautures.core.requester.IFeatureHttpRequester;
+import as3snapi.api.INetworkConnection;
+import as3snapi.api.feautures.IFeatureEventDispatcher;
+import as3snapi.api.feautures.social.IFeatureUserId;
+import as3snapi.api.feautures.social.profiles.*;
+import as3snapi.api.feautures.social.uids.IFeatureAppFriendUids;
+import as3snapi.api.feautures.social.uids.IFeatureFriendUids;
+import as3snapi.api.feautures.social.uids.IdsHandler;
+import as3snapi.base.INetworkConfig;
+import as3snapi.base.INetworkModuleContext;
+import as3snapi.base.features.IFeatureConfigGetter;
+import as3snapi.base.features.flashvars.FlashVars;
+import as3snapi.base.features.flashvars.IFeatureFlashVarsGetter;
+import as3snapi.base.features.javascript.IFeatureJavaScript;
+import as3snapi.base.features.javascript.JavaScriptUtils;
+import as3snapi.base.features.log.FeatureLogTrace;
+import as3snapi.base.features.log.IFeatureLog;
+import as3snapi.base.features.requester.IFeatureHttpRequester;
+import as3snapi.utils.bus.IBus;
+import as3snapi.utils.bus.IMutableBus;
 
 import flash.events.EventDispatcher;
 import flash.events.IEventDispatcher;
 
 internal class FeatureConfig implements IFeatureConfigGetter {
     private var config:INetworkConfig;
+
     public function FeatureConfig(config:INetworkConfig) {
         this.config = config;
     }

@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark">
+
+    <s:HGroup>
+        <s:Image source="{avatarUrl}" width="90" height="90"/>
+        <s:Group>
+            <s:TextArea id="infoTA" width="350" height="80" editable="false" text="{raw?rawData:info}"/>
+        </s:Group>
+        <s:VGroup>
+            <s:ToggleButton label="Raw data" selected="@{raw}"/>
+            <s:Button label="Copy to clipboard" click="button1_clickHandler(event)"/>
+        </s:VGroup>
+    </s:HGroup>
+
+    <fx:Script><![CDATA[
+        import as3snapi.api.feautures.social.profiles.IProfile;
+        import as3snapi.utils.JsonUtils;
+
+        import flash.desktop.Clipboard;
+        import flash.desktop.ClipboardFormats;
+
+        [Bindable]
+        private var profile:IProfile;
+        [Bindable]
+        private var info:String;
+        [Bindable]
+        private var avatarUrl:String;
+        [Bindable]
+        private var rawData:String;
+        [Bindable]
+        private var raw:Boolean;
+
+        override public function set data(value:Object):void {
+            super.data = value;
+            profile = IProfile(data);
+            avatarUrl = profile.getAvatar();
+            info = [
+                "userId: " + profile.getUserId(),
+                "fullName: " + profile.getFullName(),
+                "profileUrl: " + profile.getProfileUrl(),
+                "gender: " + profile.getGender(),
+                "avatar: " + profile.getAvatar(),
+                "photos: " + JsonUtils.encode(profile.getPhotos())
+            ].join("\n");
+            rawData = JsonUtils.encode(profile.getRawData());
+        }
+
+        private function button1_clickHandler(event:MouseEvent):void {
+            Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, infoTA.text);
+        }
+        ]]></fx:Script>
+</s:ItemRenderer>

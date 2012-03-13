@@ -1,5 +1,5 @@
 package as3snapi {
-import as3snapi.core.INetworkConnectHandler;
+import as3snapi.api.INetworkConnectHandler;
 
 /**
  * Фасадный интерфейс для as3snapi
