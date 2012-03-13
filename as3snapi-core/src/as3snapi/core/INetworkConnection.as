@@ -11,5 +11,7 @@ public interface INetworkConnection {
 
     function hasFeature(featureClass:Class):Boolean;
 
+    function getConfig():INetworkConfig;
+
 }
 }
