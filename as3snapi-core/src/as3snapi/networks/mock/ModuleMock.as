@@ -2,6 +2,7 @@ package as3snapi.networks.mock {
 import as3snapi.api.feautures.social.SocialFeaturesInstallHelper;
 import as3snapi.base.INetworkModule;
 import as3snapi.base.INetworkModuleContext;
+import as3snapi.base.features.asyncinit.IFeatureAsyncInit;
 import as3snapi.base.features.flashvars.FlashVars;
 import as3snapi.networks.mock.features.IFeatureMockApi;
 import as3snapi.networks.mock.impl.MockApiImpl;
@@ -15,7 +16,6 @@ public class ModuleMock implements INetworkModule {
     public function ModuleMock() {
     }
 
-
     public function isAvailable(context:INetworkModuleContext):Boolean {
         var flashVars:FlashVars = context.getFlashVars();
         return flashVars.isEmpty() && (context.getConfig() is ConfigMock);
@@ -27,6 +27,7 @@ public class ModuleMock implements INetworkModule {
         var api:MockApiImpl = new MockApiImpl(context);
         bus.addFeature(IFeatureMockApi, api);
         SocialFeaturesInstallHelper.installBasicFeatures(bus, api);
+        bus.addFeature(IFeatureAsyncInit, api);
     }
 }
 }

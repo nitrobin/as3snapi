@@ -14,7 +14,6 @@ import as3snapi.base.INetworkModule;
 import as3snapi.base.INetworkModuleContext;
 import as3snapi.base.features.IFeatureConfigGetter;
 import as3snapi.base.features.asyncinit.AsyncInitHandler;
-import as3snapi.base.features.asyncinit.IAsyncInitHandler;
 import as3snapi.base.features.asyncinit.IFeatureAsyncInit;
 import as3snapi.base.features.flashvars.FlashVars;
 import as3snapi.base.features.flashvars.IFeatureFlashVarsGetter;
@@ -30,7 +29,12 @@ import as3snapi.utils.EnumUtils;
 import as3snapi.utils.bus.BusImpl;
 import as3snapi.utils.bus.IMutableBus;
 
+import flash.utils.clearTimeout;
+import flash.utils.setTimeout;
+
 public class ConnectionFactory implements IConnectionFactory {
+
+    private static const CRITICAL_TIMEOUT:int = 2000;
 
     private var flashVars:FlashVars;
     private var networkModules:Vector.<INetworkModule> = new <INetworkModule>[];
@@ -118,7 +122,7 @@ public class ConnectionFactory implements IConnectionFactory {
                 }
             }
         }
-        handler.onFail("");
+        handler.onFail("Detection fail");
     }
 
     private function doConnect(networkModule:INetworkModule, context:INetworkModuleContext, handler:INetworkConnectHandler):void {
@@ -140,29 +144,43 @@ public class ConnectionFactory implements IConnectionFactory {
         logFeatures(bus);
         var connection:NetworkConnection = new NetworkConnection(bus, context.getConfig());
 
-        //TODO Возможно стоит избавиться от кастинга
+        // таймаут
+        var timerId:uint = setTimeout(onTimeout, CRITICAL_TIMEOUT);
+        function onTimeout():void {
+            handler.onFail("Connection timeout");
+            handler = null;
+        }
+
         var log:IFeatureLog = bus.getFeature(IFeatureLog);
         if (bus.hasFeature(IFeatureAsyncInit)) {
-            log.log("Init: AsyncInit.init()...");
-            //TODO: таймаут
-            var initHandler:IAsyncInitHandler = new AsyncInitHandler(function (result:Object):void {
-                log.log("Init: ready.");
-                handler.onSuccess(connection);
-            }, function (result:Object):void {
-                handler.onFail(result);
-            });
+            log.log("IFeatureAsyncInit#init()...");
             var feature:IFeatureAsyncInit = bus.getFeature(IFeatureAsyncInit);
-            feature.init(initHandler);
+            feature.init(new AsyncInitHandler(onReady, onFail));
             bus.disable(IFeatureAsyncInit);
         } else {
+            onReady();
+        }
+
+        function onReady(result:Object = null):void {
+            clearTimeout(timerId);
             log.log("Init: ready.");
-            handler.onSuccess(connection);
+            if (handler != null) {
+                handler.onSuccess(connection);
+            }
+        }
+
+        function onFail(result:Object):void {
+            log.log("Init: fail.");
+            clearTimeout(timerId);
+            if (handler != null) {
+                handler.onFail(result);
+            }
         }
     }
 
     private function logFlashVars(bus:IMutableBus):void {
         var log:IFeatureLog = bus.getFeature(IFeatureLog);
-        log.log("FLASHVARS: ");
+        log.log("FlashVars: ");
         log.log("" + flashVars);
     }
 
@@ -173,7 +191,7 @@ public class ConnectionFactory implements IConnectionFactory {
             features.push(EnumUtils.getShortClassName(featureClass));
         }
         features.sort();
-        log.log("FEATURES: ");
+        log.log("Features: ");
         log.log(features.join("\n"));
     }
 

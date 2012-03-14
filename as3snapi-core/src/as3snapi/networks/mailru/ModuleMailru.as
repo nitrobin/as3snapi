@@ -27,6 +27,10 @@ public class ModuleMailru implements INetworkModule {
         if (config == null) {
             return false;
         }
+        if (!config.getPrivateKey()) {
+            context.log("WARNING Mail.ru Config : empty privateKey");
+            return false;
+        }
         try {
             var js:IFeatureJavaScript = context.getJavaScript();
             if (js.isAvailable() && js.call("function(){return !!mailru}")) {

@@ -27,6 +27,10 @@ public class ModuleOdnoklassnikiru implements INetworkModule {
         if (config == null) {
             return false;
         }
+        if (!config.getSecretKey()) {
+            context.log("WARNING Odnoklassniki.ru Config : empty secretKey");
+            return false;
+        }
 
         var flashVars:FlashVars = context.getFlashVars();
         var apiServer:String = flashVars.getString('api_server');

@@ -3,10 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/as3snapi-core/as3snapi-core.iml" filepath="$PROJECT_DIR$/as3snapi-core/as3snapi-core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/core/as3snapi-core.iml" filepath="$PROJECT_DIR$/core/as3snapi-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/as3snapi-sandbox/as3snapi-sandbox.iml" filepath="$PROJECT_DIR$/as3snapi-sandbox/as3snapi-sandbox.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sandbox/as3snapi-sandbox.iml" filepath="$PROJECT_DIR$/sandbox/as3snapi-sandbox.iml" />
-      <module fileurl="file://$PROJECT_DIR$/as3snapi-sandbox/sandbox.iml" filepath="$PROJECT_DIR$/as3snapi-sandbox/sandbox.iml" />
     </modules>
   </component>
 </project>

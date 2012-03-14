@@ -39,5 +39,20 @@ public class FeatureJavaScript implements IFeatureJavaScript {
     public function addCallback(functionName:String, closure:Function):void {
         ExternalInterface.addCallback(functionName, closure);
     }
+
+    public function isCallbacksAvailable():Boolean {
+        if (ExternalInterface.available) {
+            try {
+                var fn:String = "testCallback" + Math.random();
+                ExternalInterface.addCallback(fn, function (...rest):void {
+                });
+                ExternalInterface.addCallback(fn, null);
+                return true;
+            } catch (e:Error) {
+                return false;
+            }
+        }
+        return false;
+    }
 }
 }

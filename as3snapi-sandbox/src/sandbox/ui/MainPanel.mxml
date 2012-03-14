@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
           xmlns:s="library://ns.adobe.com/flex/spark"
-          xmlns:containers="library://ns.adobe.com/flex/mx"
-          creationComplete="creationCompleteHandler(event)">
+          xmlns:containers="library://ns.adobe.com/flex/mx">
 
     <s:ButtonBar dataProvider="{pages}"/>
     <containers:ViewStack id="pages" creationPolicy="all" width="100%" height="100%">
@@ -85,18 +84,6 @@
         public var appFriendsProfiles:IList;
         [Bindable]
         public var profiles:IList = new ArrayList();
-        private var appController:AppController;
-
-        private function creationCompleteHandler(event:FlexEvent):void {
-//TODO:            loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, uncaughtErrorHandler);
-            appController = new AppController(this);
-            appController.connect();
-//            setTimeout(function(){throw new Error("");},1000);
-        }
-
-        //        private function uncaughtErrorHandler(event:UncaughtErrorEvent):void {
-        //            log(event.error);
-        //        }
 
         public function log(msg:*):void {
             logTxt.text = logTxt.text + FeatureLogTrace.universalDump(msg) + "\n";

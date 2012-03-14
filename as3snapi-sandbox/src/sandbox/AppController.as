@@ -117,8 +117,9 @@ public class AppController implements INetworkConnectHandler {
 
     public function onFail(result:Object):void {
         logLine();
-        log("FAIL");
         log(result);
+        log("FAIL");
+        log("Click 'settings' and check application keys.");
     }
 
     public function onSuccess(connection:INetworkConnection):void {
@@ -127,16 +128,6 @@ public class AppController implements INetworkConnectHandler {
         log("READY");
         logLine();
         try {
-            addBtn("Capture mock data", function (e:MouseEvent):void {
-                var mockCapture:MockDataCapture = new MockDataCapture(connection.getBus());
-                mockCapture.capture(function (data:Object):void {
-                    Alert.show("Captured", "Mock data", Alert.OK, view, function (e:CloseEvent):void {
-                        mockCapture.saveFile();
-                    });
-                }, function (r:Object):void {
-                    log(r);
-                });
-            });
             testBus(connection);
         } catch (e:Error) {
             log(e.getStackTrace());
@@ -144,6 +135,7 @@ public class AppController implements INetworkConnectHandler {
     }
 
     private function testBus(connection:INetworkConnection):void {
+        //TODO: Привести в более компактный/читабельный вид
 
         var fNetworkInfo:IFeatureNetworkId = connection.getFeature(IFeatureNetworkId)
         if (fNetworkInfo != null) {
@@ -193,6 +185,8 @@ public class AppController implements INetworkConnectHandler {
         } else {
             //log("IFeatureVkUiApi - UNSUPPORTED");
         }
+
+        log("Start async tests..");
 
         var asyncs:Array = [
             function ():void {
@@ -324,9 +318,6 @@ public class AppController implements INetworkConnectHandler {
             },
         ];
 
-        log("Start async test..");
-        next();
-
         function next():void {
             logLine();
             if (asyncs.length > 0) {
@@ -336,6 +327,8 @@ public class AppController implements INetworkConnectHandler {
                 log("Async test finished.");
             }
         }
+
+        next();
     }
 
     private function addBtn(label:String, clickHandler:Function):void {
@@ -343,6 +336,22 @@ public class AppController implements INetworkConnectHandler {
         b.label = label;
         b.addEventListener(MouseEvent.CLICK, clickHandler);
         view.btns.addElement(b);
+    }
+
+    public function captureMockSnapshot():void {
+        if (connection == null) {
+            Alert.show("Network not detected.\nData not available.");
+        } else {
+            var mockCapture:MockDataCapture = new MockDataCapture(connection.getBus());
+            mockCapture.capture(function (data:Object):void {
+                Alert.show("Captured", "Mock data", Alert.OK, view,
+                        function (e:CloseEvent):void {
+                            mockCapture.saveFile();
+                        });
+            }, function (r:Object):void {
+                log(r);
+            });
+        }
     }
 }
 }

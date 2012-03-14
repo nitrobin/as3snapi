@@ -7,24 +7,38 @@
     <s:VGroup width="100%" height="100%">
         <s:HGroup width="100%">
             <s:Button label="Settings" click="button1_clickHandler(event)"/>
+            <s:Button label="Capture mock snapshot" click="button2_clickHandler(event)"/>
         </s:HGroup>
-        <ui:MainPanel width="100%" height="100%"/>
+        <ui:MainPanel id="mainPanel" width="100%" height="100%"/>
     </s:VGroup>
 
     <fx:Script><![CDATA[
         import mx.events.FlexEvent;
         import mx.managers.PopUpManager;
 
+        import sandbox.AppController;
         import sandbox.ui.PropsDlg;
 
-        private function creationCompleteHandler(event:FlexEvent):void {
+        private var appController:AppController;
 
+        private function creationCompleteHandler(event:FlexEvent):void {
+            appController = new AppController(mainPanel);
+            appController.connect();
+            //TODO:            loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, uncaughtErrorHandler);
         }
+
+        //private function uncaughtErrorHandler(event:UncaughtErrorEvent):void {
+        //    log(event.error);
+        //}
 
         private function button1_clickHandler(event:MouseEvent):void {
             var propsDlg:PropsDlg = new PropsDlg();
             PopUpManager.addPopUp(propsDlg, this, true);
             PopUpManager.centerPopUp(propsDlg);
+        }
+
+        private function button2_clickHandler(event:MouseEvent):void {
+            appController.captureMockSnapshot();
         }
         ]]></fx:Script>
 </s:Application>

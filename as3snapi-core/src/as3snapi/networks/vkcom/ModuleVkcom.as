@@ -49,7 +49,7 @@ public class ModuleVkcom implements INetworkModule {
 
         var js:IFeatureJavaScript = context.getJavaScript();
 //        if (js.isAvailable()) {
-        if (jsCallbacksAvailable(js)) {
+        if (js.isCallbacksAvailable()) {
             context.log("Using JavaScript driver");
             bus.addFeature(IFeatureVkcomRequester, new VkcomRequesterJs(state, context));
             bus.addFeature(IFeatureVkcomMethods, new VkcomMethodsJs(state, context));
@@ -71,21 +71,6 @@ public class ModuleVkcom implements INetworkModule {
         var apiCore:VkcomApiCore = new VkcomApiCore(state, context, shortNetworkId);
         bus.addFeature(IFeatureVkcomApiCore, apiCore);
         SocialFeaturesInstallHelper.installBasicFeatures(bus, apiCore);
-    }
-
-    private function jsCallbacksAvailable(js:IFeatureJavaScript):Boolean {
-        if (js.isAvailable()) {
-            try {
-                var fn:String = "testVkCallback" + getTimer();
-                js.addCallback(fn, function (...rest):void {
-                });
-                js.addCallback(fn, null);
-                return true;
-            } catch (e:Error) {
-                return false;
-            }
-        }
-        return false;
     }
 }
 }

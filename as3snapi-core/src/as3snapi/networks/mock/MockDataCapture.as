@@ -140,7 +140,7 @@ public class MockDataCapture {
     public function saveFile(fname:String = null):void {
         var fileReference:FileReference = new FileReference();
         var encodedData:String = JsonUtils.encode(data);
-        var defaultFileName:String = fname || ("user" + data.userId + ".json");
+        var defaultFileName:String = fname || ((data.shortNetworkId || "") + "-" + data.userId + ".json");
         fileReference.save(encodedData, defaultFileName);
     }
 

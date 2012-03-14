@@ -9,5 +9,6 @@ public interface IFeatureJavaScript {
 
     function addCallback(functionName:String, closure:Function):void;
 
+    function isCallbacksAvailable():Boolean;
 }
 }
