@@ -8,6 +8,7 @@ import as3snapi.api.feautures.social.profiles.IFeatureFriendsProfiles;
 import as3snapi.api.feautures.social.profiles.IFeatureProfiles;
 import as3snapi.api.feautures.social.profiles.IProfile;
 import as3snapi.api.feautures.social.profiles.ProfilesHandler;
+import as3snapi.base.features.flashvars.IFeatureFlashVarsGetter;
 import as3snapi.utils.JsonUtils;
 import as3snapi.utils.bus.IBus;
 
@@ -36,6 +37,9 @@ public class MockDataCapture {
         }
         if (bus.hasFeature(IFeatureAppId)) {
             data.appId = IFeatureAppId(bus.getFeature(IFeatureAppId)).getAppId();
+        }
+        if (bus.hasFeature(IFeatureFlashVarsGetter)) {
+            data.flashVars = IFeatureFlashVarsGetter(bus.getFeature(IFeatureFlashVarsGetter)).getFlashVars().toString();
         }
         if (bus.hasFeature(IFeatureUserId)) {
             data.userId = IFeatureUserId(bus.getFeature(IFeatureUserId)).getUserId();
