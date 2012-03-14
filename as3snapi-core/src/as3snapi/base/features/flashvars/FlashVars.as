@@ -19,6 +19,10 @@ public class FlashVars {
         return JsonUtils.encode(flashVars);
     }
 
+    public function asObject():Object {
+        return flashVars;
+    }
+
     public function isEmpty():Boolean {
         for (var k:String in flashVars) {
             return false;

@@ -39,7 +39,7 @@ public class MockDataCapture {
             data.appId = IFeatureAppId(bus.getFeature(IFeatureAppId)).getAppId();
         }
         if (bus.hasFeature(IFeatureFlashVarsGetter)) {
-            data.flashVars = IFeatureFlashVarsGetter(bus.getFeature(IFeatureFlashVarsGetter)).getFlashVars().toString();
+            data.flashVars = IFeatureFlashVarsGetter(bus.getFeature(IFeatureFlashVarsGetter)).getFlashVars().asObject();
         }
         if (bus.hasFeature(IFeatureUserId)) {
             data.userId = IFeatureUserId(bus.getFeature(IFeatureUserId)).getUserId();
