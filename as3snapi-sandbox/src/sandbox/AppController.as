@@ -32,8 +32,8 @@ import as3snapi.networks.vkcom.ConfigVkcom;
 import as3snapi.networks.vkcom.ModuleVkcom;
 import as3snapi.networks.vkcom.features.IFeatureVkcomApiCore;
 import as3snapi.networks.vkcom.features.IFeatureVkcomApiUi;
-import as3snapi.plugins.IBusModule;
-import as3snapi.plugins.logs.BusModuleLogHook;
+import as3snapi.base.plugins.IBusModule;
+import as3snapi.base.plugins.logs.BusModuleLogHook;
 
 import flash.events.MouseEvent;
 

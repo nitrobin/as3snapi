@@ -1,4 +1,4 @@
-package as3snapi.plugins {
+package as3snapi.base.plugins {
 import flash.events.Event;
 
 /**

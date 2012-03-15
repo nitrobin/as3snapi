@@ -1,4 +1,4 @@
-package as3snapi.plugins {
+package as3snapi.base.plugins {
 import as3snapi.utils.bus.IMutableBus;
 
 /**

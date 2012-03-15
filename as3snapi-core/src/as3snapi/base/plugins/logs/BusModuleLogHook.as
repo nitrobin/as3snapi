@@ -1,6 +1,6 @@
-package as3snapi.plugins.logs {
+package as3snapi.base.plugins.logs {
 import as3snapi.base.features.log.*;
-import as3snapi.plugins.IBusModule;
+import as3snapi.base.plugins.IBusModule;
 import as3snapi.utils.bus.IMutableBus;
 
 public class BusModuleLogHook implements IBusModule {
