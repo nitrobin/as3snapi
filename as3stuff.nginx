@@ -2,6 +2,15 @@
 server {
 	server_name localhost;
 	listen   80;
+    access_log /var/log/nginx/localhost.access.log;
+    error_log /var/log/nginx/localhost.error.log;
+
+	location /iframe_fb.html {
+	    root /srv/www;
+	    autoindex on;
+	    expires -1;
+	    error_page 405 =200 $uri;
+	}
 
 	location / {
 	    root /srv/www;

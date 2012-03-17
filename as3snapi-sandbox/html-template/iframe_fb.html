@@ -1,0 +1,108 @@
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US"
+      xmlns:fb="https://www.facebook.com/2008/fbml">
+<head>
+    <title>Facebook App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <script type="text/javascript" src="//connect.facebook.net/en_US/all.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+</head>
+<body>
+<div id="fb-root"></div>
+
+<div id="flash-app"></div>
+
+<fb:login-button show-faces="true" width="200" max-rows="1" scope="publish_actions">
+    Login
+</fb:login-button>
+
+<script>
+    $(document).ready(function () {
+        FB.init({
+            appId:'147449281941936', // App ID
+            status:true, // check login status
+            cookie:true, // enable cookies to allow the server to access the session
+            xfbml:true  // parse XFBML
+        });
+
+        FB.Event.subscribe('auth.login', function (response) {
+            // do something with response
+            getLoginStatus()
+        });
+        getLoginStatus();
+    });
+
+    function getLoginStatus() {
+        FB.getLoginStatus(function (response) {
+            if (response.status === 'connected') {
+                // the user is logged in and has authenticated your
+                // app, and response.authResponse supplies
+                // the user's ID, a valid access token, a signed
+                // request, and the time the access token
+                // and signed request each expire
+                var uid = response.authResponse.userID;
+                var accessToken = response.authResponse.accessToken;
+
+                initFlash(response.authResponse);
+            } else if (response.status === 'not_authorized') {
+                // the user is logged in to Facebook,
+                // but has not authenticated your app
+                login();
+            } else {
+                // the user isn't logged in to Facebook.
+                login();
+            }
+        });
+    }
+
+    function logout() {
+        FB.logout(function (response) {
+            // user is now logged out
+            alert("logout")
+        });
+    }
+
+    function login() {
+        FB.login(function (response) {
+            if (response.authResponse) {
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me', function (response) {
+                    console.log('Good to see you, ' + response.name + '.');
+                });
+            } else {
+                console.log('User cancelled login or did not fully authorize.');
+            }
+        });
+    }
+
+    function initFlash(flashVars) {
+        var params = []
+        for (var k in flashVars) {
+            params.push(encodeURIComponent(k) + "=" + encodeURIComponent(flashVars[k]))
+        }
+        flashVars = params.join("&");
+
+        var flashId = 'flash-app';
+        var data = 'as3snapi-sandbox.swf';
+
+        var attr = {name:flashId, data:data, width:760, height:660};
+        var param = {
+            allowscriptaccess:'always',
+            allownetworking:'all',
+            allowfullscreen:true,
+            wmode:'opaque',
+            flashvars:flashVars
+        }
+        if (swfobject.hasFlashPlayerVersion('11.0.0')) {
+            swfobject.createSWF(attr, param, flashId);
+        } else {
+            attr.data = 'http://swfobject.googlecode.com/svn/trunk/swfobject/expressInstall.swf';
+            swfobject.showExpressInstall(att, {}, flash.id);
+        }
+    }
+
+</script>
+
+</body>
+</html>

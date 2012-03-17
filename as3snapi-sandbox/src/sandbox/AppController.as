@@ -21,6 +21,10 @@ import as3snapi.api.feautures.social.uids.IdsHandler;
 import as3snapi.base.INetworkConfig;
 import as3snapi.base.INetworkModule;
 import as3snapi.base.features.log.FeatureLogTrace;
+import as3snapi.base.plugins.IBusModule;
+import as3snapi.base.plugins.logs.BusModuleLogHook;
+import as3snapi.networks.fbcom.ConfigFbcom;
+import as3snapi.networks.fbcom.ModuleFbcom;
 import as3snapi.networks.mailru.ConfigMailru;
 import as3snapi.networks.mailru.ModuleMailru;
 import as3snapi.networks.mock.ConfigMock;
@@ -32,8 +36,6 @@ import as3snapi.networks.vkcom.ConfigVkcom;
 import as3snapi.networks.vkcom.ModuleVkcom;
 import as3snapi.networks.vkcom.features.IFeatureVkcomApiCore;
 import as3snapi.networks.vkcom.features.IFeatureVkcomApiUi;
-import as3snapi.base.plugins.IBusModule;
-import as3snapi.base.plugins.logs.BusModuleLogHook;
 
 import flash.events.MouseEvent;
 
@@ -72,12 +74,14 @@ public class AppController implements INetworkConnectHandler {
                     new ConfigVkcom(),
                     new ConfigMailru(props.MAILRU_PRIVATE_KEY),
                     new ConfigOdnoklassnikiru(props.ODNOKLASSNIKI_SECRET_KEY),
+                    new ConfigFbcom(),
                     new ConfigMock().setData(mockData)//.setDataUrl("mock.json.html"),
                 ],
                 new <INetworkModule>[
                     new ModuleVkcom(),
                     new ModuleMailru(),
                     new ModuleOdnoklassnikiru(),
+                    new ModuleFbcom(),
                     new ModuleMock(),
                 ],
                 new <IBusModule>[
