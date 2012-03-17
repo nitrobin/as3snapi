@@ -35,7 +35,73 @@ https://bitbucket.org/nitrobin/as3snapi/downloads
 http://cdn.bitbucket.org/nitrobin/as3snapi/downloads/as3snapi-sandbox-1.0.4-SNAPSHOT.swf
 Без параметров приложение запуститься в режиме mock;
 
-Пример использования:
-TODO:
- 
 Библиотека находится в стадии активной разработки и API может быть изменен.
+
+Пример использования (инициализация API и загрузка своего профиля):
+
+// as3snapi-sandbox/src/HelloWorld.as
+public class HelloWorld extends Sprite {
+    private var tf:TextField = new TextField();
+
+    public function HelloWorld() {
+        tf.width = 500;
+        tf.height = 500;
+        tf.wordWrap = true;
+        addChild(tf);
+
+        // Подключение и настройка требуемых соцсетей
+        var factory:IConnectionFactory = new ConnectionFactory(
+                stage.loaderInfo.parameters, // Передача FlashVars
+                new <INetworkConfig>[ // Настройки соцсетей
+                    new ConfigVkcom(),
+                    new ConfigMock().setData(MOCK_DATA), // Указываем снимок данных
+                ],
+                new <INetworkModule>[ // Подключение модулей соцсетей
+                    new ModuleVkcom(),
+                    new ModuleMock(),
+                ],
+                new <IBusModule>[ // Подключение дополнительных модуле
+                    new BusModuleLogTrace() // Включаем выдачу внутренних логов через trace
+                ]
+        );
+
+        // Подключаемся к API
+        factory.createConnection(new NetworkConnectHandler(onSuccess, onFail));
+
+        function onFail(result:Object):void {
+            trace("FAIL");// Неудача
+        }
+
+        function onSuccess(connection:INetworkConnection):void {
+            trace("READY");// API готово
+            // Получаем фичу для загрузки своего профиля
+            var feature:IFeatureSelfProfile = connection.getFeature(IFeatureSelfProfile)
+            if (feature != null) {
+                // фича доступна, загружаем профиль
+                feature.getSelfProfile(
+                        new OneProfileHandler(function (profile:IProfile):void {
+                            // Обрабатываем полученный профиль
+                            tf.text = "Hello, " + profile.getFullName() + "!\n" +
+                                      "Your profile: " + JsonUtils.encode(profile);
+                        }, function (result:Object):void {
+                            // Ошибка при получении профиля
+                            trace("FAIL: " + JsonUtils.encode(result));
+                        }));
+            } else {
+                // фича недоступна.. :(
+                trace("IFeatureSelfProfile - UNSUPPORTED");
+            }
+        }
+    }
+
+    // Фиксированные данные для выдачи через Mock API
+    private static const MOCK_DATA:Object = {
+        shortNetworkId:"mock",
+        userId:1,
+        inviterId:2,
+        appId:123,
+        profiles:{1:{fullName:"Jimmy"}, 2:{fullName:"Pavel"}, 3:{fullName:"Mark"}},
+        appFriendsUids:[2],
+        friendsUids:[2, 3]
+    };
+}
