@@ -24,8 +24,8 @@ public class HelloWorld extends Sprite {
     private var tf:TextField = new TextField();
 
     public function HelloWorld() {
-        tf.width = 500;
-        tf.height = 500;
+        tf.width = 400;
+        tf.height = 400;
         tf.wordWrap = true;
         addChild(tf);
 
@@ -49,11 +49,11 @@ public class HelloWorld extends Sprite {
         factory.createConnection(new NetworkConnectHandler(onSuccess, onFail));
 
         function onFail(result:Object):void {
-            trace("FAIL");// Неудача
+            tf.text = "FAIL";// Неудача
         }
 
         function onSuccess(connection:INetworkConnection):void {
-            trace("READY");// API готово
+            tf.text = "READY";// API готово
             // Получаем фичу для загрузки своего профиля
             var feature:IFeatureSelfProfile = connection.getFeature(IFeatureSelfProfile)
             if (feature != null) {
@@ -65,11 +65,11 @@ public class HelloWorld extends Sprite {
                                     "Your profile: " + JsonUtils.encode(profile);
                         }, function (result:Object):void {
                             // Ошибка при получении профиля
-                            trace("FAIL: " + JsonUtils.encode(result));
+                            tf.text = "FAIL: " + JsonUtils.encode(result);
                         }));
             } else {
                 // фича недоступна.. :(
-                trace("IFeatureSelfProfile - UNSUPPORTED");
+                tf.text = "IFeatureSelfProfile - UNSUPPORTED";
             }
         }
     }
