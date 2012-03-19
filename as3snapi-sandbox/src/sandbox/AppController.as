@@ -25,6 +25,7 @@ import as3snapi.base.plugins.IBusModule;
 import as3snapi.base.plugins.logs.BusModuleLogHook;
 import as3snapi.networks.fbcom.ConfigFbcom;
 import as3snapi.networks.fbcom.ModuleFbcom;
+import as3snapi.networks.fbcom.features.IFeatureFbcomApiCore;
 import as3snapi.networks.mailru.ConfigMailru;
 import as3snapi.networks.mailru.ModuleMailru;
 import as3snapi.networks.mock.ConfigMock;
@@ -74,7 +75,7 @@ public class AppController implements INetworkConnectHandler {
                     new ConfigVkcom(),
                     new ConfigMailru(props.MAILRU_PRIVATE_KEY),
                     new ConfigOdnoklassnikiru(props.ODNOKLASSNIKI_SECRET_KEY),
-                    new ConfigFbcom(),
+                    new ConfigFbcom(props.FACEBOOK_APP_ID),
                     new ConfigMock().setData(mockData)//.setDataUrl("mock.json.html"),
                 ],
                 new <INetworkModule>[
@@ -123,6 +124,7 @@ public class AppController implements INetworkConnectHandler {
         logLine();
         log(result);
         log("FAIL");
+        log("Check 'WARNINGS' in log.");
         log("Click 'settings' and check application keys.");
     }
 
@@ -188,6 +190,15 @@ public class AppController implements INetworkConnectHandler {
             })
         } else {
             //log("IFeatureVkUiApi - UNSUPPORTED");
+        }
+
+        var fFbApi:IFeatureFbcomApiCore = connection.getFeature(IFeatureFbcomApiCore)
+        if (fFbApi != null) {
+            log("IFeatureFbcomApiCore.getAccessToken: " + fFbApi.getAccessToken());
+            log("IFeatureFbcomApiCore.getSignedRequest: " + fFbApi.getSignedRequest());
+            log("IFeatureFbcomApiCore.getExpiresIn: " + fFbApi.getExpiresIn());
+        } else {
+//            log("IFeatureFbcomApiCore - UNSUPPORTED");
         }
 
         log("Start async tests..");

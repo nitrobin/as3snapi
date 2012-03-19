@@ -10,7 +10,10 @@ import as3snapi.api.feautures.social.uids.IFeatureAppFriendUids;
 import as3snapi.api.feautures.social.uids.IFeatureFriendUids;
 import as3snapi.api.feautures.social.uids.IIdsHandler;
 import as3snapi.base.INetworkModuleContext;
+import as3snapi.base.features.asyncinit.IAsyncInitHandler;
+import as3snapi.base.features.asyncinit.IFeatureAsyncInit;
 import as3snapi.base.features.javascript.JavaScriptUtils;
+import as3snapi.networks.fbcom.ConfigFbcom;
 import as3snapi.networks.fbcom.features.IFeatureFbcomApiCore;
 
 public class FbcomApiImpl implements IFeatureFbcomApiCore,
@@ -21,17 +24,18 @@ public class FbcomApiImpl implements IFeatureFbcomApiCore,
         IFeatureInvitePopup,
         IFeatureProfiles,
         IFeatureAppFriendUids,
-        IFeatureFriendUids
-//        IFeatureAsyncInit
-{
+        IFeatureFriendUids,
+        IFeatureAsyncInit {
     //TODO: рефакторинг, оптимизация
 
     private var shortNetworkId:String;
     private var state:FbcomState;
 
     private var jsUtils:JavaScriptUtils;
+    private var config:ConfigFbcom;
 
     public function FbcomApiImpl(state:FbcomState, context:INetworkModuleContext, shortNetworkId:String) {
+        this.config = ConfigFbcom(context.getConfig());
         this.state = state;
         this.jsUtils = context.getJavaScriptUtils();
         this.shortNetworkId = shortNetworkId;
@@ -45,6 +49,73 @@ public class FbcomApiImpl implements IFeatureFbcomApiCore,
     public function getUserId():String {
         return state.userID;
     }
+
+    public function getSignedRequest():String {
+        return state.signedRequest;
+    }
+
+    public function getAccessToken():String {
+        return state.accessToken;
+    }
+
+    public function getExpiresIn():Number {
+        return state.expiresIn;
+    }
+
+    public function init(handler:IAsyncInitHandler):void {
+        if (state.hasUserId()) {
+            handler.onSuccess("ok");
+            return;
+        }
+
+        if (config.getAppId() == null) {
+            handler.onFail("appId is null");
+            return;
+        }
+        jsUtils.callSmart("FB.init", {
+            appId:config.getAppId(), // App ID
+            status:true, // check login status
+            cookie:true, // enable cookies to allow the server to access the session
+            xfbml:true  // parse XFBML
+        });
+
+        function getLoginStatus():void {
+            jsUtils.callSmart("FB.getLoginStatus", function (response:*):void {
+                if (response.status == 'connected') {
+                    ready(response.authResponse);
+                } else if (response.status == 'not_authorized') {
+                    // the user is logged in to Facebook,
+                    // but has not authenticated your app
+                    login();
+                } else {
+                    // the user isn't logged in to Facebook.
+                    login();
+                }
+            });
+        }
+
+        function login():void {
+            jsUtils.callSmart("FB.login", function (response:*):void {
+                if (response.authResponse) {
+                    ready(response.authResponse);
+                } else {
+                    //User cancelled login or did not fully authorize.
+                    handler.onFail("cancelled")
+                }
+            });
+        }
+
+        function ready(authResponse:Object):void {
+            state.accessToken = authResponse.accessToken;
+            state.signedRequest = authResponse.signedRequest;
+            state.userID = authResponse.userID;
+            state.expiresIn = authResponse.expiresIn;
+            handler.onSuccess("ok");
+        }
+
+        getLoginStatus();
+    }
+
 
     public function getProfiles(uids:Array, handler:IProfilesHandler):void {
         if (uids == null || uids.length <= 0) {

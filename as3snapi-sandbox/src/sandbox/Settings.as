@@ -6,10 +6,12 @@ public dynamic class Settings {
 
     public var MAILRU_PRIVATE_KEY:String;
     public var ODNOKLASSNIKI_SECRET_KEY:String;
+    public var FACEBOOK_APP_ID:String;
 
     public var keys:Array = [
         "MAILRU_PRIVATE_KEY",
-        "ODNOKLASSNIKI_SECRET_KEY"
+        "ODNOKLASSNIKI_SECRET_KEY",
+        "FACEBOOK_APP_ID",
     ];
 
     public function Settings() {

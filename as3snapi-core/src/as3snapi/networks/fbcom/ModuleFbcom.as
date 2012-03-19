@@ -2,11 +2,11 @@ package as3snapi.networks.fbcom {
 import as3snapi.api.feautures.social.SocialFeaturesInstallHelper;
 import as3snapi.base.INetworkModule;
 import as3snapi.base.INetworkModuleContext;
+import as3snapi.base.features.asyncinit.IFeatureAsyncInit;
 import as3snapi.base.features.javascript.IFeatureJavaScript;
 import as3snapi.networks.fbcom.features.IFeatureFbcomApiCore;
 import as3snapi.networks.fbcom.impl.FbcomApiImpl;
 import as3snapi.networks.fbcom.impl.FbcomState;
-import as3snapi.networks.vkcom.ConfigVkcom;
 import as3snapi.utils.bus.IMutableBus;
 
 public class ModuleFbcom implements INetworkModule {
@@ -19,9 +19,12 @@ public class ModuleFbcom implements INetworkModule {
     }
 
     public function isAvailable(context:INetworkModuleContext):Boolean {
-        var config:ConfigVkcom = context.getConfig() as ConfigVkcom
+        var config:ConfigFbcom = context.getConfig() as ConfigFbcom;
         if (config == null) {
             return false;
+        }
+        if (config.getAppId() == null && context.getFlashVars().isEmpty()) {
+            context.log("WARNING Facebook appId is null")
         }
         try {
             var js:IFeatureJavaScript = context.getJavaScript();
@@ -48,7 +51,7 @@ public class ModuleFbcom implements INetworkModule {
         var apiCore:FbcomApiImpl = new FbcomApiImpl(state, context, shortNetworkId);
         bus.addFeature(IFeatureFbcomApiCore, apiCore);
         SocialFeaturesInstallHelper.installBasicFeatures(bus, apiCore);
-        //TODO:bus.addFeature(IFeatureAsyncInit, apiCore);
+        bus.addFeature(IFeatureAsyncInit, apiCore);
     }
 }
 }

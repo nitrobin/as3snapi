@@ -34,7 +34,7 @@ import flash.utils.setTimeout;
 
 public class ConnectionFactory implements IConnectionFactory {
 
-    private static const CRITICAL_TIMEOUT:int = 2000;
+    private static const CRITICAL_TIMEOUT:int = 60000;
 
     private var flashVars:FlashVars;
     private var networkModules:Vector.<INetworkModule> = new <INetworkModule>[];
@@ -146,6 +146,7 @@ public class ConnectionFactory implements IConnectionFactory {
 
         // таймаут
         var timerId:uint = setTimeout(onTimeout, CRITICAL_TIMEOUT);
+
         function onTimeout():void {
             handler.onFail("Connection timeout");
             handler = null;
