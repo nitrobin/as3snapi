@@ -40,8 +40,6 @@
                         <optimize>true</optimize>
                         <targetPlayer>${flashplayer.version}</targetPlayer>
                         <staticLinkRuntimeSharedLibraries>true</staticLinkRuntimeSharedLibraries>
-                        <!--<warnings>--><!--<noConstructor>false</noConstructor>--><!--</warnings>--><!--<locales>--><!--<locale>en_US</locale>--><!--</locales>--><!--<configurationReport>true</configurationReport>-->
-
                         <compilerWarnings>
                             <no-constructor>false</no-constructor>
                         </compilerWarnings>
@@ -73,30 +71,7 @@
                         </dependency>
                     </dependencies>
                 </plugin>
-
-                <!--
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <configuration>
-                        <outputDirectory>${project.build.directory}/lib/</outputDirectory>
-                        <overWriteReleases>false</overWriteReleases>
-                        <overWriteSnapshots>false</overWriteSnapshots>
-                        <overWriteIfNewer>true</overWriteIfNewer>
-                        <artifactItems/>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>copy-dependencies</id>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>copy-dependencies</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                -->
-            </plugins>
+             </plugins>
         </pluginManagement>
     </build>
 
@@ -107,22 +82,6 @@
             <version>${flex.version}</version>
             <type>pom</type>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>com.adobe.flexunit</groupId>
-            <artifactId>flexunit</artifactId>
-            <version>4.1.0</version>
-            <type>swc</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.adobe</groupId>
-            <artifactId>as3corelib</artifactId>
-            <version>0.93.0</version>
-            <type>swc</type>
-        </dependency>
-        -->
     </dependencies>
 
     <repositories>

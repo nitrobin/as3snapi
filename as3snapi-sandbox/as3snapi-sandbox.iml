@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="Flex" version="4">
-  <component name="Flex.Build.Configuration">
-    <option name="DO_BUILD" value="true" />
-    <option name="MAIN_CLASS" value="SandboxMain" />
-    <option name="OUTPUT_FILE_NAME" value="as3snapi-sandbox.swf" />
-    <option name="TARGET_PLAYER_VERSION" value="11.1" />
-    <option name="ADDITIONAL_COMPILER_OPTIONS" value="-static-link-runtime-shared-libraries=true" />
-    <option name="VERSION" value="3" />
+  <component name="FlexBuildConfigurationManager" active="as3snapi-sandbox">
+    <configurations>
+      <configuration name="as3snapi-sandbox" main-class="SandboxMain" output-file="as3snapi-sandbox.swf" output-folder="/srv/www/production/as3snapi-sandbox">
+        <dependencies target-player="11.1">
+          <entries>
+            <entry module-name="as3snapi-core" build-configuration-name="as3snapi-core">
+              <dependency linkage="Merged" />
+            </entry>
+          </entries>
+          <sdk name="flex_sdk" />
+        </dependencies>
+        <compiler-options>
+          <option name="additionalOptions" value="-static-link-runtime-shared-libraries=true" />
+        </compiler-options>
+        <packaging-air-desktop />
+        <packaging-android />
+        <packaging-ios />
+      </configuration>
+    </configurations>
+    <compiler-options />
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
@@ -14,9 +27,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/html-template" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
     <orderEntry type="module" module-name="as3snapi-core" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="jdk" jdkName="flex_sdk" jdkType="__CompositeFlexSdk__" />
   </component>
 </module>
 

@@ -1,35 +1,35 @@
 <?xml version="1.0"?>
 <s:VGroup xmlns:fx="http://ns.adobe.com/mxml/2009"
-          xmlns:s="library://ns.adobe.com/flex/spark"
-          xmlns:containers="library://ns.adobe.com/flex/mx">
+        xmlns:s="library://ns.adobe.com/flex/spark"
+        xmlns:containers="library://ns.adobe.com/flex/mx">
 
-    <s:ButtonBar dataProvider="{pages}"/>
+    <s:ButtonBar dataProvider="{pages}" chromeColor="blue" color="white" />
     <containers:ViewStack id="pages" creationPolicy="all" width="100%" height="100%">
         <s:NavigatorContent label="Log" width="100%" height="100%">
             <s:VGroup width="100%" height="100%">
                 <!--<s:Button label="clear log" click="logTxt.text='';"/>-->
-                <s:TextArea width="100%" height="100%" id="logTxt" editable="false"/>
+                <s:TextArea width="100%" height="100%" id="logTxt" editable="false" />
             </s:VGroup>
         </s:NavigatorContent>
         <s:NavigatorContent label="apiLog" width="100%" height="100%">
             <s:VGroup width="100%" height="100%">
-                <s:Button label="clear log" click="apiLogTxt.text='';"/>
-                <s:TextArea width="100%" height="100%" id="apiLogTxt" editable="false"/>
+                <s:Button label="clear log" click="apiLogTxt.text='';" />
+                <s:TextArea width="100%" height="100%" id="apiLogTxt" editable="false" />
             </s:VGroup>
         </s:NavigatorContent>
         <s:NavigatorContent label="eventLog" width="100%" height="100%">
             <s:VGroup width="100%" height="100%">
-                <s:Button label="clear log" click="eventLogTxt.text='';"/>
-                <s:TextArea width="100%" height="100%" id="eventLogTxt" editable="false"/>
+                <s:Button label="clear log" click="eventLogTxt.text='';" />
+                <s:TextArea width="100%" height="100%" id="eventLogTxt" editable="false" />
             </s:VGroup>
         </s:NavigatorContent>
         <s:NavigatorContent label="friends" width="100%" height="100%">
             <s:Scroller width="100%" height="100%">
                 <s:DataGroup itemRenderer="sandbox.ui.ProfileRenderer"
-                             id="friendsProfilesDG"
-                             dataProvider="{friendsProfiles}">
+                        id="friendsProfilesDG"
+                        dataProvider="{friendsProfiles}">
                     <s:layout>
-                        <s:VerticalLayout useVirtualLayout="true"/>
+                        <s:VerticalLayout useVirtualLayout="true" />
                     </s:layout>
                 </s:DataGroup>
             </s:Scroller>
@@ -37,10 +37,10 @@
         <s:NavigatorContent label="appFriends" width="100%" height="100%">
             <s:Scroller width="100%" height="100%">
                 <s:DataGroup itemRenderer="sandbox.ui.ProfileRenderer"
-                             id="appFriendsProfilesDG"
-                             dataProvider="{appFriendsProfiles}">
+                        id="appFriendsProfilesDG"
+                        dataProvider="{appFriendsProfiles}">
                     <s:layout>
-                        <s:VerticalLayout useVirtualLayout="true"/>
+                        <s:VerticalLayout useVirtualLayout="true" />
                     </s:layout>
                 </s:DataGroup>
             </s:Scroller>
@@ -48,16 +48,16 @@
         <s:NavigatorContent label="profiles" width="100%" height="100%">
             <s:VGroup width="100%" height="100%">
                 <s:HGroup>
-                    <s:TextInput id="profilesUserIdTI" width="200"/>
-                    <s:Button id="profilesLoadBtn" label="load profiles"/>
-                    <s:Button label="clean history" click="profiles =  new ArrayList()"/>
+                    <s:TextInput id="profilesUserIdTI" width="200" />
+                    <s:Button id="profilesLoadBtn" label="load profiles" />
+                    <s:Button label="clean history" click="profiles =  new ArrayList()" />
                 </s:HGroup>
                 <s:Scroller width="100%" height="100%">
                     <s:DataGroup itemRenderer="sandbox.ui.ProfileRenderer"
-                                 id="profilesDG"
-                                 dataProvider="{profiles}">
+                            id="profilesDG"
+                            dataProvider="{profiles}">
                         <s:layout>
-                            <s:VerticalLayout useVirtualLayout="true"/>
+                            <s:VerticalLayout useVirtualLayout="true" />
                         </s:layout>
                     </s:DataGroup>
                 </s:Scroller>
@@ -65,7 +65,7 @@
         </s:NavigatorContent>
         <s:NavigatorContent label="uiFeatures" width="100%" height="100%">
             <s:Scroller width="100%" height="100%">
-                <s:VGroup id="btns"/>
+                <s:VGroup id="btns" />
             </s:Scroller>
         </s:NavigatorContent>
     </containers:ViewStack>
@@ -74,9 +74,6 @@
 
         import mx.collections.ArrayList;
         import mx.collections.IList;
-        import mx.events.FlexEvent;
-
-        import sandbox.AppController;
 
         [Bindable]
         public var friendsProfiles:IList;
