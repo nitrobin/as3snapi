@@ -4,7 +4,7 @@
     <configurations>
       <configuration name="as3snapi-core" output-type="Library" output-file="as3snapi-core.swc" output-folder="/srv/www/production/as3snapi-core">
         <dependencies target-player="11.1">
-          <sdk name="flex_sdk" />
+          <sdk name="4.5" />
         </dependencies>
         <compiler-options />
         <packaging-air-desktop />
@@ -20,7 +20,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="jdk" jdkName="flex_sdk" jdkType="__CompositeFlexSdk__" />
+    <orderEntry type="jdk" jdkName="4.5" jdkType="__CompositeFlexSdk__" />
   </component>
 </module>
 

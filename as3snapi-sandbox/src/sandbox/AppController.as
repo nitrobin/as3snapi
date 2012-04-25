@@ -1,5 +1,6 @@
 package sandbox {
 import as3snapi.ConnectionFactory;
+import as3snapi.DefaultBusFactory;
 import as3snapi.IConnectionFactory;
 import as3snapi.api.INetworkConnectHandler;
 import as3snapi.api.INetworkConnection;
@@ -31,6 +32,7 @@ import as3snapi.networks.mailru.ModuleMailru;
 import as3snapi.networks.mock.ConfigMock;
 import as3snapi.networks.mock.MockDataCapture;
 import as3snapi.networks.mock.ModuleMock;
+import as3snapi.networks.mock.SnapshotBuilder;
 import as3snapi.networks.odnoklassnikiru.ConfigOdnoklassnikiru;
 import as3snapi.networks.odnoklassnikiru.ModuleOdnoklassnikiru;
 import as3snapi.networks.vkcom.ConfigVkcom;
@@ -52,15 +54,6 @@ import spark.components.Button;
 public class AppController implements INetworkConnectHandler {
     private var view:MainPanel;
     private var connection:INetworkConnection;
-    private var mockData:Object = {
-        shortNetworkId:"mock",
-        userId:1,
-        inviterId:2,
-        asppId:123,
-        profiles:{1:{fullName:"test1"}, 2:{fullName:"test1"}, 3:{fullName:"test1"}},
-        appFriendsUids:[2],
-        friendsUids:[2, 3]
-    };
 
     public function AppController(view:MainPanel) {
         this.view = view;
@@ -76,7 +69,7 @@ public class AppController implements INetworkConnectHandler {
                     new ConfigMailru(props.MAILRU_PRIVATE_KEY),
                     new ConfigOdnoklassnikiru(props.ODNOKLASSNIKI_SECRET_KEY),
                     new ConfigFbcom(props.FACEBOOK_APP_ID),
-                    new ConfigMock().setData(mockData)//.setDataUrl("mock.json.html"),
+                    new ConfigMock().setSnapshot(SnapshotBuilder.helloWorld().build())//.setDataUrl("mock.json.html"),
                 ],
                 new <INetworkModule>[
                     new ModuleVkcom(),
@@ -85,10 +78,10 @@ public class AppController implements INetworkConnectHandler {
                     new ModuleFbcom(),
                     new ModuleMock(),
                 ],
-                new <IBusModule>[
-                    new BusModuleLogHook(view.log, view.apiLog, view.eventLog)
-                ]
-        );
+                new DefaultBusFactory(
+                        new <IBusModule>[
+                            new BusModuleLogHook(view.log, view.apiLog, view.eventLog)
+                        ]));
         log("try connecting...");
         logLine();
         try {

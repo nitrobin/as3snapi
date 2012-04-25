@@ -34,7 +34,7 @@ public class HelloWorld extends Sprite {
                 stage.loaderInfo.parameters, // Передача FlashVars
                 new <INetworkConfig>[ // Настройки соцсетей
                     new ConfigVkcom(),
-                    new ConfigMock().setData(MOCK_DATA), // Указываем снимок данных
+                    new ConfigMock().setSnapshot(MOCK_DATA), // Указываем снимок данных
                 ],
                 new <INetworkModule>[ // Подключение модулей соцсетей
                     new ModuleVkcom(),

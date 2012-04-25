@@ -29,37 +29,37 @@ public class MockApiImpl implements IFeatureMockApi,
         IFeatureFriendUids,
         IFeatureAsyncInit {
     private var config:ConfigMock;
-    private var data:Object;
+    private var snapshot:Object;
 
     private var httpRequester:IFeatureHttpRequester;
 
     public function MockApiImpl(context:INetworkModuleContext) {
         this.config = ConfigMock(context.getConfig());
-        this.data = config.getData();
+        this.snapshot = config.getSnapshot();
         this.httpRequester = context.getHttpRequester();
     }
 
     public function getShortNetworkId():String {
-        return data.shortNetworkId;
+        return snapshot.shortNetworkId;
     }
 
     public function getAppId():String {
-        return data.appId;
+        return snapshot.appId;
     }
 
     public function getUserId():String {
-        return data.userId;
+        return snapshot.userId;
     }
 
     public function getRefererId():String {
-        return data.refererId;
+        return snapshot.refererId;
     }
 
     public function getProfiles(uids:Array, handler:IProfilesHandler):void {
-        if (data.profiles) {
+        if (snapshot.profiles) {
             var profiles:Array = [];
             for each(var uid:String in uids) {
-                var u:Object = data.profiles[uid];
+                var u:Object = snapshot.profiles[uid];
                 profiles.push(parseProfile(u, uid));
             }
             handler.onSuccess(profiles);
@@ -85,21 +85,21 @@ public class MockApiImpl implements IFeatureMockApi,
     }
 
     public function getAppFriendUids(handler:IIdsHandler):void {
-        handler.onSuccess(data.appFriendsUids || []);
+        handler.onSuccess(snapshot.appFriendsUids || []);
     }
 
     public function getFriendUids(handler:IIdsHandler):void {
-        handler.onSuccess(data.friendsUids || []);
+        handler.onSuccess(snapshot.friendsUids || []);
     }
 
     public function init(handler:IAsyncInitHandler):void {
-        if (data == null) {
+        if (snapshot == null) {
             var dataUrl:String = config.getDataUrl();
             if (dataUrl == null) {
-                handler.onFail("Empty data")
+                handler.onFail("Empty snapshot")
             } else {
                 httpRequester.doRequestJson(dataUrl, null, URLRequestMethod.GET, function (r:Object):void {
-                    data = r;
+                    snapshot = r;
                     handler.onSuccess("ok");
                 }, function (r:Object):void {
                     handler.onFail(r);
@@ -110,8 +110,8 @@ public class MockApiImpl implements IFeatureMockApi,
         }
     }
 
-    public function getMockaData():Object {
-        return data;
+    public function getMockSnapshot():Object {
+        return snapshot;
     }
 }
 }
