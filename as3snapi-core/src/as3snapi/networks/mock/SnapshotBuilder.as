@@ -2,6 +2,7 @@
  * @author nitrobin
  */
 package as3snapi.networks.mock {
+
 public class SnapshotBuilder {
     private var snapshot:Object;
 
@@ -24,9 +25,14 @@ public class SnapshotBuilder {
         return this;
     }
 
-    public function setInviterId(inviterId:String):SnapshotBuilder {
-        snapshot.inviterId = inviterId;
-        setProfile(inviterId);
+    public function setRefererId(refererId:String):SnapshotBuilder {
+        snapshot.refererId = refererId;
+        setProfile(refererId);
+        return this;
+    }
+
+    public function setFlashVars(flashVars:Object):SnapshotBuilder {
+        snapshot.flashVars = flashVars;
         return this;
     }
 
@@ -43,6 +49,14 @@ public class SnapshotBuilder {
         return this;
     }
 
+    public function addAppFriend(userId:String, fullName:String = null):SnapshotBuilder {
+        var appFriendsUids:Array = snapshot.appFriendsUids || [];
+        appFriendsUids.push(userId);
+        setProfile(userId, fullName);
+        snapshot.appFriendsUids = appFriendsUids;
+        return this;
+    }
+
     public function setFriendsUids(friendsUids:Array):SnapshotBuilder {
         snapshot.friendsUids = friendsUids;
         for each(var uid:String in friendsUids) {
@@ -51,11 +65,23 @@ public class SnapshotBuilder {
         return this;
     }
 
-    public function setProfile(userId:String, fullName:String = null):SnapshotBuilder {
+    public function addFriend(userId:String, fullName:String = null):SnapshotBuilder {
+        var friendsUids:Array = snapshot.friendsUids || [];
+        friendsUids.push(userId);
+        setProfile(userId, fullName);
+        snapshot.friendsUids = friendsUids;
+        return this;
+    }
+
+    public function setProfile(userId:String, fullName:String = null, avatar:String = null, photos:Array = null, profileUrl:String = null, gender:String = null):SnapshotBuilder {
         var profiles:Object = snapshot.profiles || {};
         profiles[userId] = {
             userId:userId,
-            fullName:fullName || ("user" + userId)
+            fullName:fullName || ("user" + userId),
+            avatar:avatar,
+            photos:photos,
+            profileUrl:profileUrl,
+            gender:gender
         };
         snapshot.profiles = profiles;
         return this;
@@ -64,8 +90,9 @@ public class SnapshotBuilder {
     public static function helloWorld():SnapshotBuilder {
         return new SnapshotBuilder()
                 .setShortNetworkId("mock")
+                .setAppId("0")
                 .setUserId("1")
-                .setInviterId("2")
+                .setRefererId("2")
                 .setFriendsUids(["2", "3", "4"])
                 .setAppFriendsUids(["2", "3"]);
     }

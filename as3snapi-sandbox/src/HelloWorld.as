@@ -1,5 +1,6 @@
 package {
 import as3snapi.ConnectionFactory;
+import as3snapi.DefaultBusFactory;
 import as3snapi.IConnectionFactory;
 import as3snapi.api.INetworkConnection;
 import as3snapi.api.NetworkConnectHandler;
@@ -40,9 +41,10 @@ public class HelloWorld extends Sprite {
                     new ModuleVkcom(),
                     new ModuleMock(),
                 ],
-                new <IBusModule>[ // Подключение дополнительных модуле
-                    new BusModuleLogTrace() // Включаем выдачу внутренних логов через trace
-                ]
+                new DefaultBusFactory(
+                        new <IBusModule>[ // Подключение дополнительных модуле
+                            new BusModuleLogTrace() // Включаем выдачу внутренних логов через trace
+                        ])
         );
 
         // Подключаемся к API
