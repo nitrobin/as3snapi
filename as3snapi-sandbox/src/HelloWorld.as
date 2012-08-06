@@ -1,5 +1,6 @@
 package {
 import as3snapi.ConnectionFactory;
+import as3snapi.DefaultBusFactory;
 import as3snapi.IConnectionFactory;
 import as3snapi.api.INetworkConnection;
 import as3snapi.api.NetworkConnectHandler;
@@ -34,15 +35,16 @@ public class HelloWorld extends Sprite {
                 stage.loaderInfo.parameters, // Передача FlashVars
                 new <INetworkConfig>[ // Настройки соцсетей
                     new ConfigVkcom(),
-                    new ConfigMock().setData(MOCK_DATA), // Указываем снимок данных
+                    new ConfigMock().setSnapshot(MOCK_DATA), // Указываем снимок данных
                 ],
                 new <INetworkModule>[ // Подключение модулей соцсетей
                     new ModuleVkcom(),
                     new ModuleMock(),
                 ],
-                new <IBusModule>[ // Подключение дополнительных модуле
-                    new BusModuleLogTrace() // Включаем выдачу внутренних логов через trace
-                ]
+                new DefaultBusFactory(
+                        new <IBusModule>[ // Подключение дополнительных модуле
+                            new BusModuleLogTrace() // Включаем выдачу внутренних логов через trace
+                        ])
         );
 
         // Подключаемся к API

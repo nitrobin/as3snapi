@@ -15,6 +15,17 @@ public class FlashVars {
         return defaultValue;
     }
 
+    public function getInt(key:String, defaultValue:int = 0):int {
+        if (key in flashVars) {
+            try {
+                return int(flashVars[key]);
+            } catch (e:Error) {
+                return defaultValue;
+            }
+        }
+        return defaultValue;
+    }
+
     public function toString():String {
         return JsonUtils.encode(flashVars);
     }

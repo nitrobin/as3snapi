@@ -21,6 +21,7 @@ import flash.net.FileReference;
 public class MockDataCapture {
     private var bus:IBus;
 
+    //TODO use SnapshotBuilder
     private var data:Object = {};
 
     public function MockDataCapture(bus:IBus) {

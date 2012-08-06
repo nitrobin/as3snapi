@@ -18,12 +18,12 @@ public class ModuleMock implements INetworkModule {
 
     public function isAvailable(context:INetworkModuleContext):Boolean {
         var flashVars:FlashVars = context.getFlashVars();
-        return flashVars.isEmpty() && (context.getConfig() is ConfigMock);
+        var config:ConfigMock = context.getConfig() as ConfigMock;
+        return (config != null) && config.isAvailable();
     }
 
     public function install(context:INetworkModuleContext):void {
         var bus:IMutableBus = context.getBus();
-
         var api:MockApiImpl = new MockApiImpl(context);
         bus.addFeature(IFeatureMockApi, api);
         SocialFeaturesInstallHelper.installBasicFeatures(bus, api);

@@ -24,9 +24,7 @@ import as3snapi.base.features.log.IFeatureLog;
 import as3snapi.base.features.requester.FeatureHttpRequester;
 import as3snapi.base.features.requester.IFeatureHttpRequester;
 import as3snapi.base.plugins.BusFactoryEvent;
-import as3snapi.base.plugins.IBusModule;
 import as3snapi.utils.EnumUtils;
-import as3snapi.utils.bus.BusImpl;
 import as3snapi.utils.bus.IMutableBus;
 
 import flash.utils.clearTimeout;
@@ -39,8 +37,7 @@ public class ConnectionFactory implements IConnectionFactory {
     private var flashVars:FlashVars;
     private var networkModules:Vector.<INetworkModule> = new <INetworkModule>[];
     private var networkConfigs:Vector.<INetworkConfig> = new <INetworkConfig>[];
-    private var busModules:Vector.<IBusModule> = new <IBusModule>[];
-
+    private var busFactory:IBusFactory;
 
     /**
      *
@@ -49,25 +46,17 @@ public class ConnectionFactory implements IConnectionFactory {
      * @param networkModules спсиок модулей для используемых соцсетей
      * @param busModules список модулей для навешивания дополнительных возможностей на шину
      */
-    public function ConnectionFactory(flashVars:* = null, networkConfigs:Vector.<INetworkConfig> = null, networkModules:Vector.<INetworkModule> = null, busModules:Vector.<IBusModule> = null) {
+    public function ConnectionFactory(flashVars:* = null, networkConfigs:Vector.<INetworkConfig> = null, networkModules:Vector.<INetworkModule> = null, busFactory:IBusFactory = null) {
         if (flashVars != null) {
             setFlashVars(flashVars);
         }
         if (networkConfigs != null) {
-            for each(var config:INetworkConfig in networkConfigs) {
-                installNetworkConfig(config);
-            }
+            this.networkConfigs = networkConfigs;
         }
         if (networkModules != null) {
-            for each(var module:INetworkModule in networkModules) {
-                installNetworkModule(module);
-            }
+            this.networkModules = networkModules;
         }
-        if (busModules != null) {
-            for each(var busModule:IBusModule in busModules) {
-                installBusModule(busModule);
-            }
-        }
+        this.busFactory = busFactory || new DefaultBusFactory()
     }
 
     public function setFlashVars(flashVars:*):void {
@@ -78,42 +67,20 @@ public class ConnectionFactory implements IConnectionFactory {
         return flashVars;
     }
 
-    public function installBusModule(busModule:IBusModule):void {
-        busModules.push(busModule);
-    }
-
-    public function installNetworkModule(networkModule:INetworkModule):void {
-        networkModules.push(networkModule);
-    }
-
-    public function installNetworkConfig(config:INetworkConfig):void {
-        networkConfigs.push(config);
-    }
-
-
     public function createConnection(handler:INetworkConnectHandler):void {
-        var bus:IMutableBus = new BusImpl();
-
-        // Pre configure  bus
-        var busModue:IBusModule;
-        for each (busModue in busModules) {
-            busModue.install(bus);
-        }
-
+        var bus:IMutableBus = busFactory.createBus();
         // Add default features
         bus.addFeatureIfNotExist(IFeatureEventDispatcher, new FeatureEventDispatcher());
         bus.addFeatureIfNotExist(IFeatureLog, new FeatureLogNULL());
         bus.addFeatureIfNotExist(IFeatureFlashVarsGetter, new FeatureFlashVarsGetter(flashVars, bus));
         bus.addFeatureIfNotExist(IFeatureHttpRequester, new FeatureHttpRequester(bus));
         bus.addFeatureIfNotExist(IFeatureJavaScript, new FeatureJavaScript(bus));
-
-        logFlashVars(bus);
-
         bus.dispatchEvent(new BusFactoryEvent(BusFactoryEvent.BASIC_FEATURES_ADDED));
-
+        // log
+        logFlashVars(bus);
         // Detect
-        for each(var config:INetworkConfig in networkConfigs) {
-            for each(var networkModule:INetworkModule in networkModules) {
+        for each(var networkModule:INetworkModule in networkModules) {
+            for each(var config:INetworkConfig in networkConfigs) {
                 var context:INetworkModuleContext = new NetworkModuleContext(bus, config);
                 if (networkModule.isAvailable(context)) {
                     bus.addFeatureIfNotExist(IFeatureConfigGetter, new FeatureConfig(config));
@@ -181,8 +148,7 @@ public class ConnectionFactory implements IConnectionFactory {
 
     private function logFlashVars(bus:IMutableBus):void {
         var log:IFeatureLog = bus.getFeature(IFeatureLog);
-        log.log("FlashVars: ");
-        log.log("" + flashVars);
+        log.log("FlashVars: " + flashVars);
     }
 
     private function logFeatures(bus:IMutableBus):void {
