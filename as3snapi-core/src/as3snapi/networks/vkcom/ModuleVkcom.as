@@ -17,8 +17,6 @@ import as3snapi.networks.vkcom.impl.VkcomRequesterJs;
 import as3snapi.networks.vkcom.impl.VkcomState;
 import as3snapi.utils.bus.IMutableBus;
 
-import flash.utils.getTimer;
-
 /**
  * Модуль поддержки API vk.com
  * {@link:http://vk.com/developers.php}
