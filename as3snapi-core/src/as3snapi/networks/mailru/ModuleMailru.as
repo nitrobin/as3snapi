@@ -5,6 +5,7 @@ import as3snapi.base.INetworkModuleContext;
 import as3snapi.base.features.asyncinit.IFeatureAsyncInit;
 import as3snapi.base.features.javascript.IFeatureJavaScript;
 import as3snapi.networks.mailru.features.IFeatureMailruApiCore;
+import as3snapi.networks.mailru.features.IFeatureMailruApiUi;
 import as3snapi.networks.mailru.impl.MailruApiImpl;
 import as3snapi.networks.mailru.impl.MailruState;
 import as3snapi.utils.bus.IMutableBus;
@@ -55,6 +56,7 @@ public class ModuleMailru implements INetworkModule {
 
         var apiCore:MailruApiImpl = new MailruApiImpl(state, context, shortNetworkId);
         bus.addFeature(IFeatureMailruApiCore, apiCore);
+        bus.addFeature(IFeatureMailruApiUi, apiCore);
         SocialFeaturesInstallHelper.installBasicFeatures(bus, apiCore);
         bus.addFeature(IFeatureAsyncInit, apiCore);
     }

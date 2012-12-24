@@ -18,6 +18,7 @@ import as3snapi.base.features.javascript.JavaScriptUtils;
 import as3snapi.networks.mailru.ConfigMailru;
 import as3snapi.networks.mailru.features.EventMailru;
 import as3snapi.networks.mailru.features.IFeatureMailruApiCore;
+import as3snapi.networks.mailru.features.IFeatureMailruApiUi;
 
 import flash.events.IEventDispatcher;
 import flash.utils.clearTimeout;
@@ -27,6 +28,7 @@ import flash.utils.setTimeout;
  * Реализация mail.ru API
  */
 public class MailruApiImpl implements IFeatureMailruApiCore,
+        IFeatureMailruApiUi,
         IFeatureNetworkId,
         IFeatureAppId,
         IFeatureUserId,
@@ -164,6 +166,14 @@ public class MailruApiImpl implements IFeatureMailruApiCore,
                 handler.onSuccess(profiles);
             }
         }
+    }
+
+    public function paymentsShowDialog(service_id:int, service_name:String, mailiki_price:int):void {
+        js.call("mailru.app.payments.showDialog", {
+            service_id:service_id,
+            service_name:service_name,
+            mailiki_price:mailiki_price
+        });
     }
 }
 }
