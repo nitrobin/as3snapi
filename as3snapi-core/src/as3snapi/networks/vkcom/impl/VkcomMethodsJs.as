@@ -40,6 +40,9 @@ public class VkcomMethodsJs implements IFeatureVkcomMethods {
         event("onScrollTop");
         event("onScroll");
         event("onToggleFlash");
+        event("onOrderCancel");
+        event("onOrderSuccess");
+        event("onOrderFail");
 
         function event(event:String):void {
             jsUtils.callSmart("VK.addCallback", event, jsUtils.permanent(eventProxy));

@@ -4,6 +4,5 @@ package as3snapi.networks.vkcom.features {
  * Запросы к сети.
  */
 public interface IFeatureVkcomApiCore {
-    function getUserBalance(onSuccess:Function, onError:Function):void;
 }
 }

@@ -123,16 +123,5 @@ public class VkcomApiCore implements IFeatureVkcomApiCore,
             handler.onFail(r);
         }
     }
-
-    public function getUserBalance(onSuccess:Function, onFail:Function):void {
-        requester.apiCall("getUserBalance", null, onSuccess2, onFail2);
-        function onSuccess2(r:Object):void {
-            onSuccess(r.response);
-        }
-
-        function onFail2(r:Object):void {
-            onFail(r);
-        }
-    }
 }
 }

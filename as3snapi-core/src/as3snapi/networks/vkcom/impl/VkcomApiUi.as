@@ -29,8 +29,20 @@ public class VkcomApiUi implements IFeatureVkcomApiUi,
         methods.callMethod("showInviteBox");
     }
 
-    public function showPaymentBox(votes:int):void {
-        methods.callMethod("showPaymentBox", votes);
+    public function showOrderBox(params:Object):void {
+        methods.callMethod("showOrderBox", params);
+    }
+
+    public function showOrderBoxVotes(votes:int):void {
+        showOrderBox({"type":"votes", "votes":votes});
+    }
+
+    public function showOrderBoxOffers(offer_id:int):void {
+        showOrderBox({"type":"offers", "offer_id":offer_id});
+    }
+
+    public function showOrderBoxItem(item:String):void {
+        showOrderBox({"type":"item", "item":item});
     }
 }
 }

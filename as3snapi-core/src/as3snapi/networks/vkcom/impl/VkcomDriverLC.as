@@ -61,6 +61,9 @@ public class VkcomDriverLC implements IFeatureVkcomMethods, IFeatureVkcomRequest
         event("onMerchantPaymentSuccess");
         event("onMerchantPaymentCancel");
         event("onMerchantPaymentFail");
+        event("onOrderCancel");
+        event("onOrderSuccess");
+        event("onOrderFail");
 
         try {
             receivingLC.connect("_out_" + connectionName);
